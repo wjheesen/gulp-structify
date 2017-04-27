@@ -1,0 +1,16 @@
+{
+  "name": "gulp-structify",
+  "dependencies": {
+    "through2": "registry:dt/through2#2.0.0+20161122001659"
+  },
+  "globalDependencies": {
+    "vinyl": "registry:dt/vinyl#1.2.0+20160924121322"
+  },
+  "devDependencies": {
+    "gulp": "registry:dt/gulp#4.0.0+20170315213030",
+    "gulp-rename": "registry:dt/gulp-rename#0.0.0+20160819180429"
+  },
+  "globalDevDependencies": {
+    "node": "registry:dt/node#7.0.0+20170322231424"
+  }
+}
