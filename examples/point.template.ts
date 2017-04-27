@@ -1,4 +1,4 @@
-﻿import Template from '../src/template';
+﻿import { Template } from "gulp-structify";
 
 /**
  * Point with x and y coordinates.

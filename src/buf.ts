@@ -2,7 +2,7 @@
 import TypedArray from './typedarray'
 
 /**
- * Helper class for iterating through a list of Structs backed by a primitive array.
+ * Helper class for working with Structs backed by a single TypedArray.
  */
 abstract class StructureBuffer<T extends TypedArray> {
     
