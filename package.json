@@ -2,7 +2,6 @@
   "name": "structify",
   "version": "1.0.0",
   "description": "The repository for gulp-structify.",
-  "main": "src/main.ts",
   "author": "wjheesen",
   "license": "ISC",
   "repository": {
@@ -12,7 +11,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
-    "gulp-structify": "^1.0.4",
+    "gulp-structify": "^1.0.5",
     "gulpclass": "^0.1.2",
     "ts-node": "^3.0.2"
   }
