@@ -1,6 +1,6 @@
 {
-  "name": "structify",
-  "version": "1.0.2",
+  "name": "gulp-structify",
+  "version": "1.0.3",
   "description": "Generates WebGL-compatible Structs and StructBuffers from a template file.",
   "main": "main.ts",
   "author": "wjheesen",
