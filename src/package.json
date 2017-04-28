@@ -17,11 +17,10 @@
     "TypeScript",
     "gulp"
   ],
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-structify": "^1.0.1",
-    "gulpclass": "^0.1.2",
-    "ts-node": "^3.0.2"
+  "dependencies": {
+    "through2": "^2.0.3",
+    "typescript": "^2.2.2",
+    "ts-type-info": "^7.0.1",
+    "vinyl": "^2.0.1"
   }
 }
