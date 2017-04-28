@@ -1,5 +1,3 @@
-/// <reference path="./typings/index.d.ts" />
-
 import File = require('vinyl');
 import * as stream from 'stream';
 import * as ts from "typescript";
@@ -52,9 +50,15 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
 
     // Add struct and buf imports
     file.addImport({
-        moduleSpecifier: 'gulp-structify',
-        namedImports: [{ name: "Structure" }, {name: "StructureBuffer"}]
+        moduleSpecifier: 'gulp-structify/struct',
+        defaultImportName: 'Structure'
     });
+
+    file.addImport({
+        moduleSpecifier: 'gulp-structify/buf',
+        defaultImportName: 'StructureBuffer'
+    });
+
 
     // Generate interface matching template
     file.addInterface({
