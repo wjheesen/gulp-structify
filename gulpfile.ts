@@ -1,7 +1,9 @@
+/// <reference path="typings/index.d.ts" />
+
 import gulp = require("gulp");
 import rename = require("gulp-rename")
-import structify from 'gulp-structify/main'
-import { Gulpclass, Task } from 'gulpclass'
+import structify = require("gulp-structify")
+import { Gulpclass, Task } from "gulpclass";
 
 @Gulpclass()
 export class Gulpfile {

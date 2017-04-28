@@ -1,9 +1,12 @@
+/// <reference path="./typings/index.d.ts" />
+
 import File = require('vinyl');
+import * as stream from 'stream';
 import * as ts from "typescript";
 import * as tsTypeInfo from "ts-type-info";
 import * as through2 from 'through2';
 
-export default function structify() {
+export default function structify(){
     return through2.obj(function (file: File, encoding, callback) {
         let info = tsTypeInfo.getInfoFromFiles([file.path], { includeTsNodes: true });
         let srcFile = info.getFile(f =>
@@ -13,7 +16,7 @@ export default function structify() {
             srcFile.imports.forEach(imprt => console.log(imprt.moduleSpecifier))
             // File must contain Template import and class extending Template
             let templateImport = srcFile.getImport(imprt =>
-                imprt.moduleSpecifier.indexOf('gulp-structify') !== -1
+                imprt.moduleSpecifier.indexOf('gulp-structify/template') !== -1
             )
             let templateSubclass = srcFile.getClass(cls =>
                 cls.extendsTypes.some(ext => ext.text.indexOf("Template<") !== -1)

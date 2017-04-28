@@ -12,7 +12,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
-    "gulp-structify": "^1.0.2",
+    "gulp-structify": "^1.0.4",
     "gulpclass": "^0.1.2",
     "ts-node": "^3.0.2"
   }

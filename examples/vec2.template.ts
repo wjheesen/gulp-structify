@@ -1,4 +1,4 @@
-﻿import { Template } from "gulp-structify";
+﻿import Template from "gulp-structify/template";
 import * as Point from './point';
 
 /**
