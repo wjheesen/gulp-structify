@@ -11,7 +11,6 @@ export default function structify(){
             f.fileName.indexOf(file.relative) !== -1
         )
         if (srcFile) {
-            srcFile.imports.forEach(imprt => console.log(imprt.moduleSpecifier))
             // File must contain Template import and class extending Template
             let templateImport = srcFile.getImport(imprt =>
                 imprt.moduleSpecifier.indexOf('gulp-structify/template') !== -1
