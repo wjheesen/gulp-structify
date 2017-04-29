@@ -4,7 +4,7 @@ import * as ts from "typescript";
 import * as tsTypeInfo from "ts-type-info";
 import * as through2 from 'through2';
 
-export default function structify(){
+function structify(){
     return through2.obj(function (file: File, encoding, callback) {
         let info = tsTypeInfo.getInfoFromFiles([file.path], { includeTsNodes: true });
         let srcFile = info.getFile(f =>
