@@ -7,7 +7,9 @@ import { Gulpclass, Task } from "gulpclass";
 export class Gulpfile {
     @Task()
     structify() {
+          // Search for files ending in .template.ts
         return gulp.src("./examples/**/*.template.ts")
+             // Generate struct file
             .pipe(structify())
             // Remove ".template" from filename
             .pipe(rename(p => {  

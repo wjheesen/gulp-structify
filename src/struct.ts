@@ -19,3 +19,4 @@ export default class Structure<T extends TypedArray> {
     }
 
 }
+

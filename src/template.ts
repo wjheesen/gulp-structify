@@ -8,29 +8,14 @@ export default class Template<T extends TypedArray>{
     set(other: this) { }
 
     /**
-     * Sets each component of this struct.
-     */
-    set$(x: number, y: number) {}
-
-    /**
      * Adds the other struct to this struct componentwise.
      */
     add(other: this) {}
 
     /**
-     * Adds the specified values to this struct componentwise.
-     */
-    add$(x: number, y: number) {}
-
-    /**
      * Subtracts the other struct from this struct componentwise.
      */
     subtract(other: this) {}
-
-    /**
-     * Subtracts the specified values from this struct componentwise.
-     */
-    subtract$(x: number, y: number) {}
 
     /**
      * Multiplies each component of this struct by the specified scalar.
@@ -67,3 +52,4 @@ export default class Template<T extends TypedArray>{
      */
     toString() {}
 }
+

@@ -31,6 +31,8 @@ export default function structify(){
     });
 };
 
+module.exports = structify;
+
 function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: tsTypeInfo.FileDefinition) {
     // destructure src file
     let struct = template.name;
