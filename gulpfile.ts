@@ -1,7 +1,8 @@
 import gulp = require("gulp");
 import rename = require("gulp-rename");
-import structify = require("gulp-structify");
+import structify from "gulp-structify";
 import { Gulpclass, Task } from "gulpclass";
+
 
 @Gulpclass()
 export class Gulpfile {
