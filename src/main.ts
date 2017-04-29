@@ -31,7 +31,7 @@ function structify(){
     });
 };
 
-module.exports = structify;
+export = structify;
 
 function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: tsTypeInfo.FileDefinition) {
     // destructure src file
