@@ -1,6 +1,6 @@
 {
   "name": "gulp-structify",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Generates WebGL-compatible Structs and StructBuffers from a template file.",
   "main": "main.js",
   "typings": "main.d.ts",
@@ -27,21 +27,11 @@
     "vinyl": "^2.0.1"
   },
   "devDependencies": {
-    "@types/del": "^2.2.32",
     "@types/gulp": "^4.0.2",
     "@types/gulp-rename": "0.0.32",
-    "@types/gulp-sourcemaps": "0.0.30",
-    "@types/merge-stream": "^1.0.28",
     "@types/node": "^7.0.15",
-    "@types/run-sequence": "0.0.29",
-    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-structify": "^1.1.4",
-    "gulp-typescript": "^3.1.6",
-    "merge-stream": "^1.0.1",
-    "run-sequence": "^1.2.2",
     "stream": "0.0.2"
   }
 }

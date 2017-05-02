@@ -1,11 +1,6 @@
 import gulp = require("gulp");
-import del = require("del");
 import rename = require("gulp-rename");
-import runSequence = require("run-sequence");
-import ts = require("gulp-typescript");
-import sourcemaps = require("gulp-sourcemaps");
-import merge = require("merge-stream");
-import structify = require("./src/main");
+import structify = require("gulp-structify");
 
 gulp.task("build:examples", function(){
     // Search for files ending in .template.ts
@@ -20,27 +15,6 @@ gulp.task("build:examples", function(){
         })) 
         // Output to same folder to preserve imports
         .pipe(gulp.dest("./examples/"));
-})
-
-gulp.task("build:lib", function(cb: gulp.TaskCallback){
-    runSequence("clean:lib",["compile:src", "copy:packageFiles"], cb);
-});
-
-gulp.task("clean:lib", function(){
-    return del(["./lib/**/*"]);
-})
-
-gulp.task("compile:src", function(){
-    let tsProject = <any> ts.createProject("tsconfig.json");
-    let tsResult = <any> gulp.src("./src/*.ts").pipe(sourcemaps.init()).pipe(tsProject());
-    return merge(tsResult, tsResult.js)
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest("./lib"));
-})
-
-gulp.task("copy:packageFiles", function(){
-    gulp.src(["./package.json", "./README.md", "./LICENSE"])
-        .pipe(gulp.dest("./lib"));
 })
 
 
