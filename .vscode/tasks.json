@@ -1,0 +1,23 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "gulp", // default
+    "showOutput": "always",
+    "tasks": [
+        {
+            "taskName": "build:lib",
+            "isShellCommand": true,
+            "isBuildCommand": true,
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "taskName": "tsc:gulpfile",
+            "command": "tsc",
+            "args": ["gulpfile.ts"],
+            "isShellCommand": true,
+            "problemMatcher": ["$tsc"]
+        }
+        
+    ]
+}

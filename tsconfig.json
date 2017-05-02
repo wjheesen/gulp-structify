@@ -1,11 +1,14 @@
 {
-  "extends": "./src/tsconfig",
   "compilerOptions": {
-    "experimentalDecorators": true
-  },
-  "include": [
-    "*",
-    "typings/**/*",
-    "examples/*"
-  ]
+    "declaration": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "target": "es5",
+    "sourceMap": true
+  }
 }
