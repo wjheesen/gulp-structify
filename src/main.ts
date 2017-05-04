@@ -60,23 +60,6 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
         defaultImportName: 'StructureBuffer'
     });
 
-
-    // Generate interface matching template
-    file.addInterface({
-        name: struct,
-        properties: properties.map(p => {
-            return {
-                name: p.name,
-                type: p.type.text,
-                documentationComment: p.documentationComment,
-            }
-        }),
-        documentationComment: structDoc,
-        onAfterWrite: writer => {
-            writer.write(`export { ${struct} as _};`)
-        }
-    });
-
     // Copy any functions contained in file
     file.functions.forEach(f => {
         if (f.tsNode) {
@@ -89,11 +72,32 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
         }
     })
 
+    // Generate interface with properties copied from the template
+    file.addInterface({
+        name: struct,
+        properties: properties.map(p => {
+            return {
+                name: p.name,
+                type: p.type.text,
+                documentationComment: p.documentationComment,
+            }
+        }),
+        documentationComment: structDoc,
+    });
+
+    // Generate namespace with same name as interface
+    let nms = file.addNamespace({
+        name: struct,
+        onAfterWrite: writer => {
+            writer.newLine().write(`export default ${struct};`)
+        }
+    })
+
     // Generate functions specified by decorators
     let generatedFunctions = generateFunctionsFromTemplate(template);
 
-    // generate "Obj" class
-    let objClass = file.addClass({
+    // generate non-struct class called Obj
+    let objClass = nms.addClass({
         isExported: true,
         name: "Obj",
         properties: properties.map(p => {
@@ -109,7 +113,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
     generateCreatersFromSetters(objClass);
 
     // Generate "Struct" class
-    let structClass = file.addClass({
+    let structClass = nms.addClass({
         name: "Struct",
         isExported: true,
         extendsTypes: [`Structure<${arrayType}>`],
@@ -142,7 +146,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
     generateCreatersFromSetters(structClass);
 
     // Generate "Buf" class
-    let bufClass = file.addClass({
+    let bufClass = nms.addClass({
         isExported: true,
         name: "Buf",
         documentationComment: `A ${struct} buffer backed by a ${arrayType}.`,
@@ -236,7 +240,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
         let originalFunctionCount = file.functions.length;
 
         // Generate automatic template functions
-        file.addFunction({
+        nms.addFunction({
             name: 'set',
             isExported: true,
             parameters: [p_this, p_other],
@@ -249,7 +253,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'set$',
             isExported: true,
             parameters: [p_this, ...components],
@@ -262,7 +266,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'add',
             isExported: true,
             parameters: [p_this, p_other],
@@ -275,7 +279,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'add$',
             isExported: true,
             parameters: [p_this, ...components],
@@ -287,7 +291,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'subtract',
             isExported: true,
             parameters: [p_this, p_other],
@@ -300,7 +304,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'subtract$',
             isExported: true,
             parameters: [p_this, ...components],
@@ -312,7 +316,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'mulScalar',
             isExported: true,
             parameters: [p_this, p_k],
@@ -325,7 +329,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'divScalar',
             isExported: true,
             parameters: [p_this, p_k],
@@ -338,7 +342,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'equals',
             isExported: true,
             parameters: [p_this, p_other],
@@ -352,7 +356,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'equalsScalar',
             isExported: true,
             parameters: [p_this, p_k],
@@ -366,7 +370,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'epsilonEquals',
             isExported: true,
             parameters: [p_this, p_other, p_e],
@@ -380,7 +384,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'epsilonEqualsScalar',
             isExported: true,
             parameters: [p_this, p_k, p_e],
@@ -394,7 +398,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
             }
         })
 
-        file.addFunction({
+        nms.addFunction({
             name: 'toString',
             isExported: true,
             parameters: [p_this],
@@ -410,7 +414,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
 
         // convert class methods to functions
         for (let m of cls.methods) {
-            file.addFunction({
+            nms.addFunction({
                 name: m.name,
                 isExported: true,
                 parameters: [p_this, ...normalizeMethodParams(m.parameters)],
@@ -433,7 +437,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, file: ts
         }
 
         // return all the functions added by this method
-        return file.functions.slice(originalFunctionCount);
+        return nms.functions.slice(originalFunctionCount);
     }
 
     function generateMethodsFromFunctions(cls: tsTypeInfo.ClassDefinition, functions: tsTypeInfo.FunctionDefinition[]) {

@@ -1,5 +1,5 @@
 ﻿import Template from "gulp-structify/template";
-import * as Point from './point';
+import Point from './point';
 
 /**
  * A two-dimensional vector with (x,y) components.
@@ -33,7 +33,7 @@ export class Vec2 extends Template<Float32Array> {
     /**
      * Sets this Vec2 to a vector from the initial point to the terminal point. 
      */
-    setFromPointToPoint(initial: Point._, terminal: Point._) {
+    setFromPointToPoint(initial: Point, terminal: Point) {
         this.x = terminal.x - initial.x;
         this.y = terminal.y - initial.y;
     }

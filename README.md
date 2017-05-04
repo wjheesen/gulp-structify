@@ -59,7 +59,6 @@ Note: `gulp-structify` automatically generates the following methods:
 - `toString()`
 
 ## Create gulp task
-
 ```javascript
 var gulp = require("gulp");
 var rename = require("gulp-rename");
@@ -87,7 +86,6 @@ gulp.task("structify", function () {
 `gulp structify`
 
 ## Examples
-
 Template | Output | Usage
 -------- | ------ | -----
 [point.template.ts][1] | [point.ts][2] |

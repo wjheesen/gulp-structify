@@ -2,7 +2,7 @@ import gulp = require("gulp");
 import rename = require("gulp-rename");
 import structify = require("gulp-structify");
 
-gulp.task("build:examples", function(){
+gulp.task("update:examples", function(){
     // Search for files ending in .template.ts
     return gulp.src("./examples/**/*.template.ts")
         // Generate struct file
