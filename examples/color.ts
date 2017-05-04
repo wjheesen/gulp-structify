@@ -2,19 +2,6 @@
 import Structure from "gulp-structify/struct";
 import StructureBuffer from "gulp-structify/buf";
 
-const ArgbRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
-
-function pad(str: string) {
-    return (str.length == 1) ? '0' + str : str;
-}
-
-/**
- * Returns a random integer between min (inclusive) and max (inclusive)
- */
-function randomInt(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 /**
  * An 8-bit (r,g,b,a) color.
  */
@@ -38,6 +25,19 @@ interface Color {
 }
 
 namespace Color {
+    const ArgbRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+
+    function pad(str: string) {
+        return (str.length == 1) ? '0' + str : str;
+    }
+
+    /**
+     * Returns a random integer between min (inclusive) and max (inclusive)
+     */
+    function randomInt(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     /**
      * Sets each component of this Color to that of the other Color.
      */
@@ -237,6 +237,18 @@ namespace Color {
      * An 8-bit (r,g,b,a) color.
      */
     export class Obj {
+        static create(other: Color) {
+            let Color = new Obj();
+            Color.set(other);
+            return Color;
+        }
+
+        static create$(r: number, g: number, b: number, a: number) {
+            let Color = new Obj();
+            Color.set$(r, g, b, a);
+            return Color;
+        }
+
         static random() {
             let Color = new Obj();
             Color.setRandom();
@@ -271,6 +283,20 @@ namespace Color {
          * The alpha component of this Color.
          */
         a: number;
+
+        /**
+         * Sets each component of this Color to that of the other Color.
+         */
+        set(other: Color) {
+            return set(this, other);
+        }
+
+        /**
+         * Sets each component of this Color.
+         */
+        set$(r: number, g: number, b: number, a: number) {
+            return set$(this, r, g, b, a);
+        }
 
         /**
          * Adds the other Color to this Color componentwise.
@@ -414,6 +440,18 @@ namespace Color {
      * A Color backed by a Uint8Array.
      */
     export class Struct extends Structure<Uint8Array> {
+        static create(other: Color) {
+            let Color = new Struct();
+            Color.set(other);
+            return Color;
+        }
+
+        static create$(r: number, g: number, b: number, a: number) {
+            let Color = new Struct();
+            Color.set$(r, g, b, a);
+            return Color;
+        }
+
         static random() {
             let Color = new Struct();
             Color.setRandom();
@@ -493,6 +531,20 @@ namespace Color {
          */
         set a(value: number) {
             this.data[3] = value;
+        }
+
+        /**
+         * Sets each component of this Color to that of the other Color.
+         */
+        set(other: Color) {
+            return set(this, other);
+        }
+
+        /**
+         * Sets each component of this Color.
+         */
+        set$(r: number, g: number, b: number, a: number) {
+            return set$(this, r, g, b, a);
         }
 
         /**
@@ -729,6 +781,20 @@ namespace Color {
         }
 
         /**
+         * Sets each component of the current Color to that of the other Color.
+         */
+        $set(other: Color) {
+            return set(this, other);
+        }
+
+        /**
+         * Sets each component of the current Color.
+         */
+        $set$(r: number, g: number, b: number, a: number) {
+            return set$(this, r, g, b, a);
+        }
+
+        /**
          * Adds the other Color to the current Color componentwise.
          */
         $add(other: Color) {
@@ -867,4 +933,4 @@ namespace Color {
     }
 }
 
-export default Color;
+export = Color;

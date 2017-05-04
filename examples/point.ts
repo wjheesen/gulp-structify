@@ -639,4 +639,4 @@ namespace Point {
     }
 }
 
-export default Point;
+export = Point;
