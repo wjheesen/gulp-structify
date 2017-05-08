@@ -15,7 +15,7 @@ import Template from "gulp-structify/template";
 /**
  * A two-dimensional vector with (x,y) components.
  */
-export class Vec2 extends Template<Float32Array> {
+class Vec2 extends Template<Float32Array> {
     /**
      * The X component of this Vec2.
      */
@@ -33,7 +33,7 @@ Note: the template should not include a constructor or any static methods.
 Now suppose we want to add a `dot` method to our `Vec2` struct. We do this by adding the method to our template: 
 
 ```TypeScript
-export class Vec2 extends Template<Float32Array> {
+class Vec2 extends Template<Float32Array> {
     // ... 
 
     /**

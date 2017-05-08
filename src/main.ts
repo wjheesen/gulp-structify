@@ -1,4 +1,4 @@
-import File = require('vinyl');
+import * as File from 'vinyl';
 import * as stream from 'stream';
 import * as ts from "typescript";
 import * as tsTypeInfo from "ts-type-info";
@@ -92,7 +92,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
     let nms = outFile.addNamespace({
         name: struct,
         onAfterWrite: writer => {
-            writer.newLine().write(`export = ${struct};`)
+            writer.newLine().write(`export default ${struct};`)
         }
     })
 

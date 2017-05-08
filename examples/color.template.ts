@@ -3,7 +3,7 @@
 /**
   * An 8-bit (r,g,b,a) color.
   */
-export class Color extends Template<Uint8Array>{
+class Color extends Template<Uint8Array>{
     /**
      * The red component of this Color.
      */

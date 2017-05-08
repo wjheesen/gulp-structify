@@ -3,7 +3,7 @@
 /**
  * Point with x and y coordinates.
  */
-export class Point extends Template<Float32Array>{
+class Point extends Template<Float32Array>{
 
     /**
      * The X coordinate of this point.
