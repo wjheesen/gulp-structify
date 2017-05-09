@@ -1,9 +1,9 @@
-﻿import TypedArray from './typedarray'
+﻿import {TypedArray} from './typedarray'
 
 /**
  * Struct backed by a TypedArray.
  */
-export default class Structure<T extends TypedArray> {
+export class Structure<T extends TypedArray> {
     
     /**
      * The TypedArray backing this item.

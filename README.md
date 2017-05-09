@@ -10,7 +10,7 @@ Generates WebGL-compatible structs and struct buffers from a template file.
 Suppose we want to create a `Vec2` struct backed by a `Float32Array`. We start with a minimal template file called `Vec2.template.ts`:
 
 ```TypeScript
-import Template from "gulp-structify/template";
+import {Template} from "gulp-structify/template";
 
 /**
  * A two-dimensional vector with (x,y) components.
@@ -33,6 +33,7 @@ Note: the template should not include a constructor or any static methods.
 Now suppose we want to add a `dot` method to our `Vec2` struct. We do this by adding the method to our template: 
 
 ```TypeScript
+// ...
 class Vec2 extends Template<Float32Array> {
     // ... 
 

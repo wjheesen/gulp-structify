@@ -4,7 +4,7 @@ import * as ts from "typescript";
 import * as tsTypeInfo from "ts-type-info";
 import * as through2 from 'through2';
 
-function structify(){
+export = function structify(){
     return through2.obj(function (file: File, encoding, callback) {
         let info = tsTypeInfo.getInfoFromFiles([file.path], { includeTsNodes: true });
         let srcFile = info.getFile(f =>
@@ -41,8 +41,6 @@ function structify(){
     });
 };
 
-export = structify;
-
 function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: tsTypeInfo.FileDefinition) {
     // destructure src file
     let struct = template.name;
@@ -67,16 +65,17 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
     // Add struct and buf imports
     outFile.addImport({
         moduleSpecifier: 'gulp-structify/struct',
-        defaultImportName: 'Structure'
+        namedImports: [{name: 'Structure'}] 
     });
 
     outFile.addImport({
         moduleSpecifier: 'gulp-structify/buf',
-        defaultImportName: 'StructureBuffer'
+        namedImports: [{name: 'StructureBuffer'}] 
     });
 
     // Generate interface with properties copied from the template
     outFile.addInterface({
+        isExported: true,
         name: struct,
         properties: properties.map(p => {
             return {
@@ -90,10 +89,8 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
     
     // Generate namespace with same name as interface (so the two merge as export)
     let nms = outFile.addNamespace({
+        isExported: true,
         name: struct,
-        onAfterWrite: writer => {
-            writer.newLine().write(`export default ${struct};`)
-        }
     })
 
     // Move contents of old file to namespace

@@ -1,6 +1,6 @@
-﻿import TypedArray from './typedarray'
+﻿import {TypedArray} from './typedarray'
 
-export default class Template<T extends TypedArray>{
+export class Template<T extends TypedArray>{
 
     /**
      * Sets each component of this struct to that of the other struct.

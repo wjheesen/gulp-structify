@@ -1,10 +1,10 @@
-﻿import Structure from './struct'
-import TypedArray from './typedarray'
+﻿import {Structure} from './struct'
+import {TypedArray} from './typedarray'
 
 /**
  * Helper class for working with Structs backed by a single TypedArray.
  */
-abstract class StructureBuffer<T extends TypedArray> {
+export abstract class StructureBuffer<T extends TypedArray> {
     
     /**
      * The primitive array data backing the Structs in this buffer.
@@ -244,5 +244,3 @@ abstract class StructureBuffer<T extends TypedArray> {
     }
 
 }
-
-export default StructureBuffer;

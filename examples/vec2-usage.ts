@@ -1,4 +1,4 @@
-import Vec2 from './vec2';
+import {Vec2} from './vec2';
 
 // Vec2 object
 let literal: Vec2 = { x: 0, y: 0 };

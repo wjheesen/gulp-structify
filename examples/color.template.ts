@@ -1,4 +1,4 @@
-﻿import Template from "gulp-structify/template";
+﻿import {Template} from "gulp-structify/template";
 
 /**
   * An 8-bit (r,g,b,a) color.
