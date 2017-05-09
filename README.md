@@ -4,7 +4,7 @@ Generates WebGL-compatible structs and struct buffers from a template file.
 [![NPM](https://nodei.co/npm/gulp-structify.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/gulp-structify/)
 
 ## Install
-`npm install gulp-structify --save-dev`
+`npm install gulp-structify --save`
 
 ## Create a template file: 
 Suppose we want to create a `Vec2` struct backed by a `Float32Array`. We start with a minimal template file called `Vec2.template.ts`:
@@ -49,6 +49,7 @@ class Vec2 extends Template<Float32Array> {
 
 Note: `gulp-structify` automatically generates the following methods:
 - `set(other: this)`
+- `setScalar(k: number)`
 - `add(other: this)`
 - `subtract(other: this)`
 - `mulScalar(k: number)`

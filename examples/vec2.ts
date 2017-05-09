@@ -35,6 +35,14 @@ export namespace Vec2 {
     }
 
     /**
+     * Sets each component of this Vec2 to the specified scalar.
+     */
+    export function setScalar(_this: Vec2, k: number) {
+        _this.x = k;
+        _this.y = k;
+    }
+
+    /**
      * Adds the other Vec2 to this Vec2 componentwise.
      */
     export function add(_this: Vec2, other: Vec2) {
@@ -194,6 +202,12 @@ export namespace Vec2 {
             return Vec2;
         }
 
+        static scalar(k: number) {
+            let Vec2 = new Obj();
+            Vec2.setScalar(k);
+            return Vec2;
+        }
+
         static fromPointToPoint(initial: Point, terminal: Point) {
             let Vec2 = new Obj();
             Vec2.setFromPointToPoint(initial, terminal);
@@ -210,6 +224,13 @@ export namespace Vec2 {
         y: number;
 
         /**
+         * Creates a Vec2 object with each component initialized to 0.
+         */
+        constructor() {
+            this.setScalar(0);
+        }
+
+        /**
          * Sets each component of this Vec2 to that of the other Vec2.
          */
         set(other: Vec2) {
@@ -221,6 +242,13 @@ export namespace Vec2 {
          */
         set$(x: number, y: number) {
             return set$(this, x, y);
+        }
+
+        /**
+         * Sets each component of this Vec2 to the specified scalar.
+         */
+        setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
@@ -373,6 +401,12 @@ export namespace Vec2 {
             return Vec2;
         }
 
+        static scalar(k: number) {
+            let Vec2 = new Struct();
+            Vec2.setScalar(k);
+            return Vec2;
+        }
+
         static fromPointToPoint(initial: Point, terminal: Point) {
             let Vec2 = new Struct();
             Vec2.setFromPointToPoint(initial, terminal);
@@ -426,6 +460,13 @@ export namespace Vec2 {
          */
         set$(x: number, y: number) {
             return set$(this, x, y);
+        }
+
+        /**
+         * Sets each component of this Vec2 to the specified scalar.
+         */
+        setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
@@ -637,6 +678,13 @@ export namespace Vec2 {
          */
         $set$(x: number, y: number) {
             return set$(this, x, y);
+        }
+
+        /**
+         * Sets each component of the current Vec2 to the specified scalar.
+         */
+        $setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**

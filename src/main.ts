@@ -109,6 +109,12 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
     let objClass = nms.addClass({
         isExported: true,
         name: "Obj",
+        constructorDef: {
+            documentationComment: `Creates a ${struct} object with each component initialized to 0.`,
+            onWriteFunctionBody: writer => {
+                writer.write(`this.setScalar(0);`)
+            }
+        },
         properties: properties.map(p => {
             return {
                 name: p.name,
@@ -271,6 +277,19 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
             onWriteFunctionBody: writer => {
                 for (let p of properties) {
                     writer.newLine().write(`${_this}.${p.name} = ${p.name};`)
+                }
+            }
+        })
+
+        nms.addFunction({
+            name: 'setScalar',
+            isExported: true,
+            parameters: [p_this, p_k],
+            returnType: "void",
+            documentationComment: `Sets each component of this ${struct} to the specified scalar.`,
+            onWriteFunctionBody: writer => {
+                for (let p of properties) {
+                    writer.newLine().write(`${_this}.${p.name} = ${k};`)
                 }
             }
         })

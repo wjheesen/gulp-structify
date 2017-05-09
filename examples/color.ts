@@ -59,6 +59,16 @@ export namespace Color {
     }
 
     /**
+     * Sets each component of this Color to the specified scalar.
+     */
+    export function setScalar(_this: Color, k: number) {
+        _this.r = k;
+        _this.g = k;
+        _this.b = k;
+        _this.a = k;
+    }
+
+    /**
      * Adds the other Color to this Color componentwise.
      */
     export function add(_this: Color, other: Color) {
@@ -249,6 +259,12 @@ export namespace Color {
             return Color;
         }
 
+        static scalar(k: number) {
+            let Color = new Obj();
+            Color.setScalar(k);
+            return Color;
+        }
+
         static random() {
             let Color = new Obj();
             Color.setRandom();
@@ -285,6 +301,13 @@ export namespace Color {
         a: number;
 
         /**
+         * Creates a Color object with each component initialized to 0.
+         */
+        constructor() {
+            this.setScalar(0);
+        }
+
+        /**
          * Sets each component of this Color to that of the other Color.
          */
         set(other: Color) {
@@ -296,6 +319,13 @@ export namespace Color {
          */
         set$(r: number, g: number, b: number, a: number) {
             return set$(this, r, g, b, a);
+        }
+
+        /**
+         * Sets each component of this Color to the specified scalar.
+         */
+        setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
@@ -452,6 +482,12 @@ export namespace Color {
             return Color;
         }
 
+        static scalar(k: number) {
+            let Color = new Struct();
+            Color.setScalar(k);
+            return Color;
+        }
+
         static random() {
             let Color = new Struct();
             Color.setRandom();
@@ -545,6 +581,13 @@ export namespace Color {
          */
         set$(r: number, g: number, b: number, a: number) {
             return set$(this, r, g, b, a);
+        }
+
+        /**
+         * Sets each component of this Color to the specified scalar.
+         */
+        setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
@@ -792,6 +835,13 @@ export namespace Color {
          */
         $set$(r: number, g: number, b: number, a: number) {
             return set$(this, r, g, b, a);
+        }
+
+        /**
+         * Sets each component of the current Color to the specified scalar.
+         */
+        $setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**

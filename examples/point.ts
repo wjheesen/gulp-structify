@@ -34,6 +34,14 @@ export namespace Point {
     }
 
     /**
+     * Sets each component of this Point to the specified scalar.
+     */
+    export function setScalar(_this: Point, k: number) {
+        _this.x = k;
+        _this.y = k;
+    }
+
+    /**
      * Adds the other Point to this Point componentwise.
      */
     export function add(_this: Point, other: Point) {
@@ -158,6 +166,12 @@ export namespace Point {
             return Point;
         }
 
+        static scalar(k: number) {
+            let Point = new Obj();
+            Point.setScalar(k);
+            return Point;
+        }
+
         static midpoint(p1: Point, p2: Point) {
             let Point = new Obj();
             Point.setMidpoint(p1, p2);
@@ -174,6 +188,13 @@ export namespace Point {
         y: number;
 
         /**
+         * Creates a Point object with each component initialized to 0.
+         */
+        constructor() {
+            this.setScalar(0);
+        }
+
+        /**
          * Sets each component of this Point to that of the other Point.
          */
         set(other: Point) {
@@ -185,6 +206,13 @@ export namespace Point {
          */
         set$(x: number, y: number) {
             return set$(this, x, y);
+        }
+
+        /**
+         * Sets each component of this Point to the specified scalar.
+         */
+        setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
@@ -304,6 +332,12 @@ export namespace Point {
             return Point;
         }
 
+        static scalar(k: number) {
+            let Point = new Struct();
+            Point.setScalar(k);
+            return Point;
+        }
+
         static midpoint(p1: Point, p2: Point) {
             let Point = new Struct();
             Point.setMidpoint(p1, p2);
@@ -357,6 +391,13 @@ export namespace Point {
          */
         set$(x: number, y: number) {
             return set$(this, x, y);
+        }
+
+        /**
+         * Sets each component of this Point to the specified scalar.
+         */
+        setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
@@ -535,6 +576,13 @@ export namespace Point {
          */
         $set$(x: number, y: number) {
             return set$(this, x, y);
+        }
+
+        /**
+         * Sets each component of the current Point to the specified scalar.
+         */
+        $setScalar(k: number) {
+            return setScalar(this, k);
         }
 
         /**
