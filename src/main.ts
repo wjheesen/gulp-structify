@@ -59,56 +59,56 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
         }
     });
 
-    // Add imports from input file
+    // Move contents of old file to namespace
     outFile.imports = inFile.imports;
+    outFile.functions = inFile.functions;
+    outFile.classes = inFile.classes;
+    outFile.interfaces = inFile.interfaces;
+    outFile.typeAliases = inFile.typeAliases;
+    outFile.enums = inFile.enums;
+    outFile.variables = inFile.variables;
+    outFile.namespaces = inFile.namespaces;
 
     // Add struct and buf imports
     outFile.addImport({
         moduleSpecifier: 'gulp-structify/struct',
-        namedImports: [{name: 'Structure'}] 
+        namedImports: [{name: 'Struct'}] 
     });
 
     outFile.addImport({
-        moduleSpecifier: 'gulp-structify/buf',
-        namedImports: [{name: 'StructureBuffer'}] 
+        moduleSpecifier: 'gulp-structify/buffer',
+        namedImports: [{name: 'StructBuffer'}] 
     });
 
     // Generate interface with properties copied from the template
     outFile.addInterface({
-        isExported: true,
         name: struct,
+        documentationComment: structDoc,
         properties: properties.map(p => {
             return {
                 name: p.name,
                 type: p.type.text,
                 documentationComment: p.documentationComment,
             }
-        }),
-        documentationComment: structDoc,
+        })
     });
-    
-    // Generate namespace with same name as interface (so the two merge as export)
+
+    // Generate namespace with all the template functions
     let nms = outFile.addNamespace({
-        isExported: true,
         name: struct,
-    })
+        documentationComment: `Namespace for shared ${struct} functions.`,
+        onAfterWrite: writer => {
+            writer.newLine().write(`export { ${struct} as I${struct} };`)
+        }
+    });
 
-    // Move contents of old file to namespace
-    nms.functions = inFile.functions;
-    nms.classes = inFile.classes;
-    nms.interfaces = inFile.interfaces;
-    nms.typeAliases = inFile.typeAliases;
-    nms.enums = inFile.enums;
-    nms.variables = inFile.variables;
-    nms.namespaces = inFile.namespaces;
+    // Generate the automatic template functions
+    addTemplateFunctionsToNamespace();
 
-    // Generate functions specified by decorators
-    let generatedFunctions = generateFunctionsFromTemplate(template);
-
-    // generate non-struct class called Obj
-    let objClass = nms.addClass({
-        isExported: true,
-        name: "Obj",
+    // generate plain old object class
+    let objClass = outFile.addClass({
+        name: `${struct}Object`,
+        documentationComment: structDoc,
         constructorDef: {
             documentationComment: `Creates a ${struct} object with each component initialized to 0.`,
             onWriteFunctionBody: writer => {
@@ -122,16 +122,18 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
                 documentationComment: p.documentationComment,
             }
         }),
-        documentationComment: structDoc,
+        onAfterWrite: writer => {
+            writer.newLine().write(`export { ${struct}Object as ${struct} };`)
+        }
     });
-    generateMethodsFromFunctions(objClass, generatedFunctions);
+    generateMethodsFromFunctions(objClass, nms.functions);
     generateCreatersFromSetters(objClass);
 
     // Generate "Struct" class
-    let structClass = nms.addClass({
-        name: "Struct",
+    let structClass = outFile.addClass({
+        name: `${struct}Struct`,
         isExported: true,
-        extendsTypes: [`Structure<${arrayType}>`],
+        extendsTypes: [`Struct<${arrayType}>`],
         documentationComment: `A ${struct} backed by a ${arrayType}.`,
         constructorDef: {
             documentationComment: `Creates a ${struct} struct.`,
@@ -157,15 +159,15 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
             }
         })
     })
-    generateMethodsFromFunctions(structClass, generatedFunctions);
+    generateMethodsFromFunctions(structClass, nms.functions);
     generateCreatersFromSetters(structClass);
 
-    // Generate "Buf" class
-    let bufClass = nms.addClass({
+    // Generate struct bfufer class
+    let bufClass = outFile.addClass({
         isExported: true,
-        name: "Buf",
+        name: `${struct}Buffer`,
         documentationComment: `A ${struct} buffer backed by a ${arrayType}.`,
-        extendsTypes: [`StructureBuffer<${arrayType}>`],
+        extendsTypes: [`StructBuffer<${arrayType}>`],
     });
     properties.forEach((p, i) => {
         let comment = p.documentationComment.replace(`this ${struct}`, `the current ${struct}`)
@@ -221,7 +223,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
             writer.write(`return new ${bufClass.name}(new ${arrayType}(capacity * ${structLength}));`);
         },
     });
-    generatedFunctions.forEach((f) => {
+    nms.functions.forEach((f) => {
         let params = f.parameters.slice(1);
         let comment = f.documentationComment.replace(`this ${struct}`, `the current ${struct}`)
         bufClass.addMethod({
@@ -233,12 +235,12 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
             documentationComment: comment,
             onWriteFunctionBody: writer => {
                 let functionArgs = ['this', ...params.map(p => p.name)];
-                writer.write(`return ${f.name}(${functionArgs.join(', ')});`);
+                writer.write(`return ${nms.name}.${f.name}(${functionArgs.join(', ')});`);
             }
         })
     })
 
-    function generateFunctionsFromTemplate(cls: tsTypeInfo.ClassDefinition) {
+    function addTemplateFunctionsToNamespace() {
 
         // create function parameters
         let _this = "_this";
@@ -250,9 +252,6 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
         let p_other = { name: other, type: struct };
         let p_k = { name: k, type: 'number' };
         let p_e = { name: e, type: 'number' };
-
-        // Get current function count
-        let originalFunctionCount = nms.functions.length;
 
         // Generate automatic template functions
         nms.addFunction({
@@ -441,14 +440,14 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
         })
 
         // convert class methods to functions
-        for (let m of cls.methods) {
+        for (let method of template.methods) {
             nms.addFunction({
-                name: m.name,
+                name: method.name,
                 isExported: true,
-                parameters: [p_this, ...normalizeMethodParams(m.parameters)],
-                documentationComment: m.documentationComment,
+                parameters: [p_this, ...normalizeMethodParams(method.parameters)],
+                documentationComment: method.documentationComment,
                 onWriteFunctionBody: writer => {
-                    let node = <ts.MethodDeclaration><any>m.tsNode;
+                    let node = <ts.MethodDeclaration><any>method.tsNode;
                     let methodRegex = /\bthis\.\s?([a-zA-Z_$][$\w]*?\s?\()/g;
                     let thisRegex = /\bthis\b/g;
                     for (let s of node.body.statements) {
@@ -463,21 +462,18 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
                 }
             })
         }
-
-        // return all the functions added by this method
-        return nms.functions.slice(originalFunctionCount);
     }
 
     function generateMethodsFromFunctions(cls: tsTypeInfo.ClassDefinition, functions: tsTypeInfo.FunctionDefinition[]) {
-        functions.forEach(f => {
-            let params = f.parameters.slice(1);
+        functions.forEach(func => {
+            let params = func.parameters.slice(1);
             cls.addMethod({
-                name: f.name,
+                name: func.name,
                 parameters: normalizeFunctionParams(params),
-                documentationComment: f.documentationComment,
+                documentationComment: func.documentationComment,
                 onWriteFunctionBody: writer => {
                     let functionArgs = ['this', ...params.map(p => p.name)];
-                    writer.write(`return ${f.name}(${functionArgs.join(', ')});`);
+                    writer.write(`return ${nms.name}.${func.name}(${functionArgs.join(', ')});`);
                 }
             })
         })
@@ -485,7 +481,7 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
 
     function generateCreatersFromSetters(cls: tsTypeInfo.ClassDefinition) {
         cls.methods
-            .filter(m => m.name.indexOf("set") === 0 && m.name.charAt(3) !== " ")
+            .filter(method => method.name.indexOf("set") === 0 && method.name.charAt(3) !== " ")
             .forEach(setter => {
                 let args = setter.parameters.map(p => p.name);
                 let name = setter.name.substring("set".length);
@@ -509,25 +505,25 @@ function generateFileFromTemplate(template: tsTypeInfo.ClassDefinition, inFile: 
 
 // Helper functions: 
 function normalizeMethodParams(params: tsTypeInfo.ClassMethodParameterDefinition[]) {
-    return params.map(p => {
+    return params.map(param => {
         return {
-            name: p.name,
-            type: p.type.node ? p.type.node.text : p.type.text,
-            isOptional: p.isOptional,
-            isRestParameter: p.isRestParameter,
-            defaultExpression: p.defaultExpression ? p.defaultExpression.text : null,
+            name: param.name,
+            type: param.type.node ? param.type.node.text : param.type.text,
+            isOptional: param.isOptional,
+            isRestParameter: param.isRestParameter,
+            defaultExpression: param.defaultExpression ? param.defaultExpression.text : null,
         }
     });
 }
 
 function normalizeFunctionParams(params: tsTypeInfo.FunctionParameterDefinition[]) {
-    return params.map(p => {
+    return params.map(param => {
         return {
-            name: p.name,
-            type: p.type.node ? p.type.node.text : p.type.text,
-            isOptional: p.isOptional,
-            isRestParameter: p.isRestParameter,
-            defaultExpression: p.defaultExpression ? p.defaultExpression.text : null,
+            name: param.name,
+            type: param.type.node ? param.type.node.text : param.type.text,
+            isOptional: param.isOptional,
+            isRestParameter: param.isRestParameter,
+            defaultExpression: param.defaultExpression ? param.defaultExpression.text : null,
         }
     });
 }

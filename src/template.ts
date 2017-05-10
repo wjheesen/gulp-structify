@@ -8,6 +8,11 @@ export class Template<T extends TypedArray>{
     set(other: this) { }
 
     /**
+     * Sets each component of this struct to the specified scalar.
+     */
+    setScalar(k: number) {}
+
+    /**
      * Adds the other struct to this struct componentwise.
      */
     add(other: this) {}

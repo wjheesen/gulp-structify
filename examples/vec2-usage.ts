@@ -1,22 +1,22 @@
-import {Vec2} from './vec2';
+import { Vec2, IVec2, Vec2Buffer, Vec2Struct } from './vec2';
 
 // Vec2 object
-let literal: Vec2 = { x: 0, y: 0 };
-Vec2.add$(literal, 2, 2);
-Vec2.normalize(literal);
+let literal: IVec2 = { x: 0, y: 0 };
+IVec2.add$(literal, 2, 2);
+IVec2.normalize(literal);
 
 // Vec2 object w/prototype
-let obj = Vec2.Obj.create$(1, 0);
+let obj = Vec2.create$(1, 0);
 obj.add(literal);
 obj.normalize();
 
 // Vec2 backed by a Float32Array
-let struct = Vec2.Struct.create$(0, 1);
+let struct = Vec2Struct.create$(0, 1);
 struct.add(obj);
 struct.normalize();
 
 // Vec2 buffer backed by a Float32Array
-let buf = Vec2.Buf.create(3);
+let buf = Vec2Buffer.create(3);
 buf.put$(1, 2);
 buf.put$(3, 4);
 buf.put(struct);

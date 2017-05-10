@@ -1,10 +1,10 @@
-﻿import {Structure} from './struct'
+﻿import {Struct} from './struct'
 import {TypedArray} from './typedarray'
 
 /**
  * Helper class for working with Structs backed by a single TypedArray.
  */
-export abstract class StructureBuffer<T extends TypedArray> {
+export abstract class StructBuffer<T extends TypedArray> {
     
     /**
      * The primitive array data backing the Structs in this buffer.
@@ -126,7 +126,7 @@ export abstract class StructureBuffer<T extends TypedArray> {
      * @param position the offset into this buffer where the Struct should be copied.
      * @param src buffer pointing to the other Struct.
      */
-    set(position: number, src: Structure<T>) {
+    set(position: number, src: Struct<T>) {
         let len = this.structLength();
         let srcPos = 0;
         let dstPos = position * len;
@@ -139,7 +139,7 @@ export abstract class StructureBuffer<T extends TypedArray> {
      * Sets each Struct of this buffer to the specified Struct.
      * @param src buffer pointing to the Struct.
      */
-    setEach(src: Structure<T>) {
+    setEach(src: Struct<T>) {
         let dstPos = 0;
         let dstLen = this.data.length;
         while (dstLen--) {
@@ -155,7 +155,7 @@ export abstract class StructureBuffer<T extends TypedArray> {
      * Sets the current Struct to the src Struct, then moves to the next position of this buffer.
      * @param src buffer pointing to the other Struct.
      */
-    put(src: Structure<T>) {
+    put(src: Struct<T>) {
         let len = this.structLength();
         let srcPos = 0;
         while (len--) {
