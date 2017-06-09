@@ -35,5 +35,3 @@ function Publish-Package(){
     npm publish
     Set-Location ..
 }
-
-export-modulemember -function Initialize-Repository, Update-Package, Update-Gulpfile, Update-Examples, Update-All, Publish-Package

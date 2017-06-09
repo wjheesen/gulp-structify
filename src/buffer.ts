@@ -17,6 +17,11 @@ export abstract class StructBuffer<T extends TypedArray> {
     protected dataPosition: number;
 
     /**
+     * Gets the number of components contained in each Struct of this buffer.
+     */
+    abstract structLength(): number;
+
+    /**
      * Gets the current position of this buffer.
      */
     position() {
@@ -29,11 +34,6 @@ export abstract class StructBuffer<T extends TypedArray> {
     capacity() {
         return (this.data.length / this.structLength()) >> 0;
     }
-
-    /**
-     * Gets the number of components contained in each Struct of this buffer.
-     */
-    abstract structLength(): number;
 
     /**
      * Creates a buffer backed by the specified array data
@@ -110,7 +110,7 @@ export abstract class StructBuffer<T extends TypedArray> {
      * @param src buffer pointing to the other Struct.
      * @param length the number of Structs to copy from the src array.
      */
-    setBuffer(position: number, src: this, length: number) {
+    setFromBuffer(position: number, src: this, length: number) {
         let srcPos = src.dataPosition;
         let dstPos = position * this.structLength();
         while (length--) {
@@ -126,7 +126,7 @@ export abstract class StructBuffer<T extends TypedArray> {
      * @param position the offset into this buffer where the Struct should be copied.
      * @param src buffer pointing to the other Struct.
      */
-    set(position: number, src: Struct<T>) {
+    setFromStruct(position: number, src: Struct<T>) {
         let len = this.structLength();
         let srcPos = 0;
         let dstPos = position * len;
@@ -136,14 +136,14 @@ export abstract class StructBuffer<T extends TypedArray> {
     }
 
     /**
-     * Sets each Struct of this buffer to the specified Struct.
-     * @param src buffer pointing to the Struct.
+     * Sets each Struct in this buffer to the specified struct.
+     * @param src the struct or the buffer pointing to the struct.
      */
-    setEach(src: Struct<T>) {
+    setEachStruct(src: Struct<T> | this) {
         let dstPos = 0;
         let dstLen = this.data.length;
         while (dstLen--) {
-            let srcPos = 0;
+            let srcPos = (<this>src).dataPosition || 0;
             let srcLen = this.structLength();
             while(srcLen--) {
                 this.data[dstPos++] = src.data[srcPos++];
@@ -152,12 +152,12 @@ export abstract class StructBuffer<T extends TypedArray> {
     }
 
     /**
-     * Sets the current Struct to the src Struct, then moves to the next position of this buffer.
-     * @param src buffer pointing to the other Struct.
+     * Sets the current struct to the src struct, then moves to the next position of this buffer.
+     * @param src the struct or the buffer pointing to the struct.
      */
-    put(src: Struct<T>) {
+    putStruct(src: Struct<T> | this) {
         let len = this.structLength();
-        let srcPos = 0;
+        let srcPos = (<this>src).dataPosition || 0;
         while (len--) {
             this.data[this.dataPosition++] = src.data[srcPos++];
         }
@@ -176,71 +176,4 @@ export abstract class StructBuffer<T extends TypedArray> {
             }
         }
     }
-
-    /**
-     * Checks if this buffer is exactly equal in every component to the other buffer.
-     * @param other the other buffer.
-     */
-    equals(other: this) {
-        // Check length
-        if (this.data.length !== other.data.length) return false;
-        // Check each component
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] !== other.data[i]) {
-                return false; // Not all equal
-            }
-        }
-        // All equal
-        return true;
-    }
-
-    /**
-     * Checks if every component of this buffer is equal to the specified scalar.
-     * @param k the scalar.
-     */
-    equalsScalar(k: number) {
-        // Check each component
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] !== k) {
-                return false; // Not all equal
-            }
-        }
-        // All equal
-        return true;
-    }
-
-    /**
-     * Checks if this buffer is approximately equal in every component to the other buffer.
-     * @param other the other buffer.
-     * @param epsilon the maximum difference allowable between each component.
-     */
-    epsilonEquals(other: this, epsilon: number) {
-        // Check length
-        if (this.data.length !== other.data.length) return false;
-        // Check each component
-        for (let i = 0; i < this.data.length; i++) {
-            if (Math.abs(this.data[i] - other.data[i]) > epsilon) {
-                return false; // Not all equal
-            }
-        }
-        // All equal
-        return true;
-    }
-
-    /**
-     * Checks if every component of this buffer is approximately equal to the specified scalar.
-     * @param k the scalar.
-     * @param epsilon the maximum difference allowable between each component.
-     */
-    epsilonEqualsScalar(other: this, k: number, epsilon: number) {
-        // Check each component
-        for (let i = 0; i < this.data.length; i++) {
-            if (Math.abs(this.data[i] - k) > epsilon) {
-                return false; // Not all equal
-            }
-        }
-        // All equal
-        return true;
-    }
-
 }

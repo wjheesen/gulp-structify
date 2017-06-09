@@ -91,14 +91,13 @@ gulp.task("structify", function () {
 Template | Output | Usage
 -------- | ------ | -----
 [point.template.ts][1] | [point.ts][2] |
-[vec2.template.ts][4] | [vec2.ts][5] | [vec2-usage.ts][6]
+[vec2.template.ts][4] | [vec2.ts][5] | 
 [color.template.ts][7] | [color.ts][8] | 
 
 [1]: https://github.com/wjheesen/gulp-structify/blob/master/examples/point.template.ts "Point Template"
 [2]: https://github.com/wjheesen/gulp-structify/blob/master/examples/point.ts "Point Output"
 [4]: https://github.com/wjheesen/gulp-structify/blob/master/examples/vec2.template.ts "Vec2 Template"
 [5]: https://github.com/wjheesen/gulp-structify/blob/master/examples/vec2.ts "Vec2 Output"
-[6]: https://github.com/wjheesen/gulp-structify/blob/master/examples/vec2-usage.ts "Vec2 Usage"
 [7]: https://github.com/wjheesen/gulp-structify/blob/master/examples/color.template.ts "Color Template"
 [8]: https://github.com/wjheesen/gulp-structify/blob/master/examples/color.ts "Color Output"
 

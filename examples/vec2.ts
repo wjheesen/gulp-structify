@@ -2,221 +2,22 @@
 import {Point} from "./point";
 import {Struct} from "gulp-structify/struct";
 import {StructBuffer} from "gulp-structify/buffer";
+import {applyMixins} from "gulp-structify/mixin";
 
 /**
  * A two-dimensional vector with (x,y) components.
  */
-interface Vec2 {
-    /**
-     * The X component of this Vec2.
-     */
-    x: number;
-    /**
-     * The Y component of this Vec2.
-     */
-    y: number;
-}
-
-/**
- * Namespace for shared Vec2 functions.
- */
-namespace Vec2 {
-    /**
-     * Sets each component of this Vec2 to that of the other Vec2.
-     */
-    export function set(_this: Vec2, other: Vec2) {
-        _this.x = other.x;
-        _this.y = other.y;
-    }
-
-    /**
-     * Sets each component of this Vec2.
-     */
-    export function set$(_this: Vec2, x: number, y: number) {
-        _this.x = x;
-        _this.y = y;
-    }
-
-    /**
-     * Sets each component of this Vec2 to the specified scalar.
-     */
-    export function setScalar(_this: Vec2, k: number) {
-        _this.x = k;
-        _this.y = k;
-    }
-
-    /**
-     * Adds the other Vec2 to this Vec2 componentwise.
-     */
-    export function add(_this: Vec2, other: Vec2) {
-        _this.x += other.x;
-        _this.y += other.y;
-    }
-
-    /**
-     * Adds the specified values to this Vec2 componentwise.
-     */
-    export function add$(_this: Vec2, x: number, y: number) {
-        _this.x += x;
-        _this.y += y;
-    }
-
-    /**
-     * Subtracts the other Vec2 from this Vec2 componentwise.
-     */
-    export function subtract(_this: Vec2, other: Vec2) {
-        _this.x -= other.x;
-        _this.y -= other.y;
-    }
-
-    /**
-     * Subtracts the specified values from this Vec2 componentwise.
-     */
-    export function subtract$(_this: Vec2, x: number, y: number) {
-        _this.x -= x;
-        _this.y -= y;
-    }
-
-    /**
-     * Multiplies each component of this Vec2 by the specified scalar.
-     */
-    export function mulScalar(_this: Vec2, k: number) {
-        _this.x *= k;
-        _this.y *= k;
-    }
-
-    /**
-     * Divides each component of this Vec2 by the specified scalar.
-     */
-    export function divScalar(_this: Vec2, k: number) {
-        _this.x /= k;
-        _this.y /= k;
-    }
-
-    /**
-     * Checks if each component of this Vec2 is equal to that of the other Vec2.
-     */
-    export function equals(_this: Vec2, other: Vec2) {
-        return _this.x === other.x && _this.y === other.y;
-    }
-
-    /**
-     * Checks if each component of this Vec2 is equal to the specified scalar.
-     */
-    export function equalsScalar(_this: Vec2, k: number) {
-        return _this.x === k && _this.y === k;
-    }
-
-    /**
-     * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
-     */
-    export function epsilonEquals(_this: Vec2, other: Vec2, e: number) {
-        return Math.abs(_this.x - other.x) <= e && Math.abs(_this.y - other.y) <= e;
-    }
-
-    /**
-     * Checks if each component of this Vec2 is approximately equal to the specified scalar.
-     */
-    export function epsilonEqualsScalar(_this: Vec2, k: number, e: number) {
-        return Math.abs(_this.x - k) <= e && Math.abs(_this.y - k) <= e;
-    }
-
-    /**
-     * Returns a string representation of this Vec2.
-     */
-    export function toString(_this: Vec2) {
-        return `{ x: ${_this.x}, y: ${_this.y} }`
-    }
-
-    /**
-     * Computes the length of this Vec2.
-     */
-    export function length(_this: Vec2) {
-        return Math.sqrt(length2(_this, ));
-    }
-
-    /**
-     * Computes the length squared of this Vec2.
-     */
-    export function length2(_this: Vec2) {
-        return _this.x * _this.x + _this.y * _this.y;
-    }
-
-    /**
-     * Sets this Vec2 to a vector from the initial point to the terminal point. 
-     */
-    export function setFromPointToPoint(_this: Vec2, initial: Point, terminal: Point) {
-        _this.x = terminal.x - initial.x;
-        _this.y = terminal.y - initial.y;
-    }
-
-    /**
-     * Computes the dot product of this Vec2 with the other Vec2.
-     */
-    export function dot(_this: Vec2, other: Vec2) {
-        return _this.x * other.x + _this.y * other.y;
-    }
-
-    /**
-     * Computes the cross product of this Vec2 with the other Vec2.
-     */
-    export function cross(_this: Vec2, other: Vec2) {
-        return (_this.x * other.y) - (other.x * _this.y);
-    }
-
-    /**
-     * Normalizes this Vec2 so that it has a length of one.
-     */
-    export function normalize(_this: Vec2) {
-        divScalar(_this, length(_this, ));
-    }
-
-    /**
-     * Rotates this Vec2 90 degrees to the left (CCW).
-     */
-    export function rotateLeft(_this: Vec2) {
-        let x = _this.x;
-        _this.x = -_this.y;
-        _this.y = x;
-    }
-
-    /**
-     * Rotates this Vec2 90 degrees to the right (CW).
-     */
-    export function rotateRight(_this: Vec2) {
-        let x = _this.x;
-        _this.x = _this.y;
-        _this.y = -x;
-    }
-}
-
-export { Vec2 as IVec2 };
-/**
- * A two-dimensional vector with (x,y) components.
- */
-class Vec2Object {
-    static create(other: Vec2) {
-        let Vec2 = new Vec2Object();
-        Vec2.set(other);
-        return Vec2;
-    }
-
-    static create$(x: number, y: number) {
-        let Vec2 = new Vec2Object();
-        Vec2.set$(x, y);
-        return Vec2;
-    }
-
-    static scalar(k: number) {
-        let Vec2 = new Vec2Object();
-        Vec2.setScalar(k);
-        return Vec2;
-    }
-
+export class Vec2 {
     static fromPointToPoint(initial: Point, terminal: Point) {
-        let Vec2 = new Vec2Object();
-        Vec2.setFromPointToPoint(initial, terminal);
-        return Vec2;
+        let vec2 = new Vec2();
+        vec2.setFromPointToPoint(initial, terminal);
+        return vec2;
+    }
+
+    static create(other: Vec2) {
+        let vec2 = new Vec2();
+        vec2.set(other);
+        return vec2;
     }
 
     /**
@@ -229,201 +30,298 @@ class Vec2Object {
     y: number;
 
     /**
-     * Creates a Vec2 object with each component initialized to 0.
+     * A two-dimensional vector with (x,y) components.
      */
-    constructor() {
-        this.setScalar(0);
-    }
-
-    /**
-     * Sets each component of this Vec2 to that of the other Vec2.
-     */
-    set(other: Vec2) {
-        return Vec2.set(this, other);
-    }
-
-    /**
-     * Sets each component of this Vec2.
-     */
-    set$(x: number, y: number) {
-        return Vec2.set$(this, x, y);
-    }
-
-    /**
-     * Sets each component of this Vec2 to the specified scalar.
-     */
-    setScalar(k: number) {
-        return Vec2.setScalar(this, k);
-    }
-
-    /**
-     * Adds the other Vec2 to this Vec2 componentwise.
-     */
-    add(other: Vec2) {
-        return Vec2.add(this, other);
-    }
-
-    /**
-     * Adds the specified values to this Vec2 componentwise.
-     */
-    add$(x: number, y: number) {
-        return Vec2.add$(this, x, y);
-    }
-
-    /**
-     * Subtracts the other Vec2 from this Vec2 componentwise.
-     */
-    subtract(other: Vec2) {
-        return Vec2.subtract(this, other);
-    }
-
-    /**
-     * Subtracts the specified values from this Vec2 componentwise.
-     */
-    subtract$(x: number, y: number) {
-        return Vec2.subtract$(this, x, y);
-    }
-
-    /**
-     * Multiplies each component of this Vec2 by the specified scalar.
-     */
-    mulScalar(k: number) {
-        return Vec2.mulScalar(this, k);
-    }
-
-    /**
-     * Divides each component of this Vec2 by the specified scalar.
-     */
-    divScalar(k: number) {
-        return Vec2.divScalar(this, k);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is equal to that of the other Vec2.
-     */
-    equals(other: Vec2) {
-        return Vec2.equals(this, other);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is equal to the specified scalar.
-     */
-    equalsScalar(k: number) {
-        return Vec2.equalsScalar(this, k);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
-     */
-    epsilonEquals(other: Vec2, e: number) {
-        return Vec2.epsilonEquals(this, other, e);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is approximately equal to the specified scalar.
-     */
-    epsilonEqualsScalar(k: number, e: number) {
-        return Vec2.epsilonEqualsScalar(this, k, e);
-    }
-
-    /**
-     * Returns a string representation of this Vec2.
-     */
-    toString() {
-        return Vec2.toString(this);
+    constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
      * Computes the length of this Vec2.
      */
     length() {
-        return Vec2.length(this);
+        return Math.sqrt(this.length2());
     }
 
     /**
      * Computes the length squared of this Vec2.
      */
     length2() {
-        return Vec2.length2(this);
+        return this.x * this.x + this.y * this.y;
     }
 
     /**
      * Sets this Vec2 to a vector from the initial point to the terminal point. 
      */
     setFromPointToPoint(initial: Point, terminal: Point) {
-        return Vec2.setFromPointToPoint(this, initial, terminal);
+        this.x = terminal.x - initial.x;
+        this.y = terminal.y - initial.y;
     }
 
     /**
      * Computes the dot product of this Vec2 with the other Vec2.
      */
     dot(other: Vec2) {
-        return Vec2.dot(this, other);
+        return this.x * other.x + this.y * other.y;
     }
 
     /**
      * Computes the cross product of this Vec2 with the other Vec2.
      */
     cross(other: Vec2) {
-        return Vec2.cross(this, other);
+        return (this.x * other.y) - (other.x * this.y);
     }
 
     /**
      * Normalizes this Vec2 so that it has a length of one.
      */
     normalize() {
-        return Vec2.normalize(this);
+        this.divScalar(this.length());
     }
 
     /**
      * Rotates this Vec2 90 degrees to the left (CCW).
      */
     rotateLeft() {
-        return Vec2.rotateLeft(this);
+        let x = this.x;
+        this.x = -this.y;
+        this.y = x;
     }
 
     /**
      * Rotates this Vec2 90 degrees to the right (CW).
      */
     rotateRight() {
-        return Vec2.rotateRight(this);
+        let x = this.x;
+        this.x = this.y;
+        this.y = -x;
+    }
+
+    /**
+     * Sets each component of this Vec2 to that of the other Vec2.
+     */
+    set(other: Vec2) {
+        this.x = other.x;
+        this.y = other.y;
+    }
+
+    /**
+     * Sets each component of this Vec2.
+     */
+    set$(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Sets each component of this Vec2 to the specified scalar.
+     */
+    setScalar(k: number) {
+        this.x = k;
+        this.y = k;
+    }
+
+    /**
+     * Adds the other Vec2 to this Vec2 componentwise.
+     */
+    add(other: Vec2) {
+        this.x += other.x;
+        this.y += other.y;
+    }
+
+    /**
+     * Adds the specified values to this Vec2 componentwise.
+     */
+    add$(x: number, y: number) {
+        this.x += x;
+        this.y += y;
+    }
+
+    /**
+     * Subtracts the other Vec2 from this Vec2 componentwise.
+     */
+    subtract(other: Vec2) {
+        this.x -= other.x;
+        this.y -= other.y;
+    }
+
+    /**
+     * Subtracts the specified values from this Vec2 componentwise.
+     */
+    subtract$(x: number, y: number) {
+        this.x -= x;
+        this.y -= y;
+    }
+
+    /**
+     * Multiplies each component of this Vec2 by the specified scalar.
+     */
+    mulScalar(k: number) {
+        this.x *= k;
+        this.y *= k;
+    }
+
+    /**
+     * Divides each component of this Vec2 by the specified scalar.
+     */
+    divScalar(k: number) {
+        this.x /= k;
+        this.y /= k;
+    }
+
+    /**
+     * Checks if each component of this Vec2 is exactly equal to that of the other Vec2.
+     */
+    equals(other: Vec2) {
+        return this.x === other.x && this.y === other.y;
+    }
+
+    /**
+     * Checks if each component of this Vec2 is exactly equal to the specified scalar.
+     */
+    equalsScalar(k: number) {
+        return this.x === k && this.y === k;
+    }
+
+    /**
+     * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
+     */
+    epsilonEquals(other: Vec2, e: number) {
+        return Math.abs(this.x - other.x) <= e && Math.abs(this.y - other.y) <= e;
+    }
+
+    /**
+     * Checks if each component of this Vec2 is approximately equal to the specified scalar.
+     */
+    epsilonEqualsScalar(k: number, e: number) {
+        return Math.abs(this.x - k) <= e && Math.abs(this.y - k) <= e;
+    }
+
+    /**
+     * Returns a string representation of this Vec2.
+     */
+    toString() {
+        return `{ x: ${this.x}, y: ${this.y} }`
     }
 }
 
-export { Vec2Object as Vec2 };
 /**
  * A Vec2 backed by a Float32Array.
  */
 export class Vec2Struct extends Struct<Float32Array> {
+    static fromPointToPoint(initial: Point, terminal: Point) {
+        let vec2 = new Vec2Struct();
+        vec2.setFromPointToPoint(initial, terminal);
+        return vec2;
+    }
+
     static create(other: Vec2) {
-        let Vec2 = new Vec2Struct();
-        Vec2.set(other);
-        return Vec2;
+        let vec2 = new Vec2Struct();
+        vec2.set(other);
+        return vec2;
     }
 
     static create$(x: number, y: number) {
-        let Vec2 = new Vec2Struct();
-        Vec2.set$(x, y);
-        return Vec2;
-    }
-
-    static scalar(k: number) {
-        let Vec2 = new Vec2Struct();
-        Vec2.setScalar(k);
-        return Vec2;
-    }
-
-    static fromPointToPoint(initial: Point, terminal: Point) {
-        let Vec2 = new Vec2Struct();
-        Vec2.setFromPointToPoint(initial, terminal);
-        return Vec2;
+        let vec2 = new Vec2Struct();
+        vec2.set$(x, y);
+        return vec2;
     }
 
     /**
-     * Creates a Vec2 struct.
+     * Computes the length of this Vec2.
      */
-    constructor() {
-        super(new Float32Array(2));
+    length: () => number;
+    /**
+     * Computes the length squared of this Vec2.
+     */
+    length2: () => number;
+    /**
+     * Sets this Vec2 to a vector from the initial point to the terminal point. 
+     */
+    setFromPointToPoint: (initial: Point, terminal: Point) => void;
+    /**
+     * Computes the dot product of this Vec2 with the other Vec2.
+     */
+    dot: (other: Vec2) => number;
+    /**
+     * Computes the cross product of this Vec2 with the other Vec2.
+     */
+    cross: (other: Vec2) => number;
+    /**
+     * Normalizes this Vec2 so that it has a length of one.
+     */
+    normalize: () => void;
+    /**
+     * Rotates this Vec2 90 degrees to the left (CCW).
+     */
+    rotateLeft: () => void;
+    /**
+     * Rotates this Vec2 90 degrees to the right (CW).
+     */
+    rotateRight: () => void;
+    /**
+     * Sets each component of this Vec2 to that of the other Vec2.
+     */
+    set: (other: Vec2) => void;
+    /**
+     * Sets each component of this Vec2.
+     */
+    set$: (x: number, y: number) => void;
+    /**
+     * Sets each component of this Vec2 to the specified scalar.
+     */
+    setScalar: (k: number) => void;
+    /**
+     * Adds the other Vec2 to this Vec2 componentwise.
+     */
+    add: (other: Vec2) => void;
+    /**
+     * Adds the specified values to this Vec2 componentwise.
+     */
+    add$: (x: number, y: number) => void;
+    /**
+     * Subtracts the other Vec2 from this Vec2 componentwise.
+     */
+    subtract: (other: Vec2) => void;
+    /**
+     * Subtracts the specified values from this Vec2 componentwise.
+     */
+    subtract$: (x: number, y: number) => void;
+    /**
+     * Multiplies each component of this Vec2 by the specified scalar.
+     */
+    mulScalar: (k: number) => void;
+    /**
+     * Divides each component of this Vec2 by the specified scalar.
+     */
+    divScalar: (k: number) => void;
+    /**
+     * Checks if each component of this Vec2 is exactly equal to that of the other Vec2.
+     */
+    equals: (other: Vec2) => boolean;
+    /**
+     * Checks if each component of this Vec2 is exactly equal to the specified scalar.
+     */
+    equalsScalar: (k: number) => boolean;
+    /**
+     * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
+     */
+    epsilonEquals: (other: Vec2, e: number) => boolean;
+    /**
+     * Checks if each component of this Vec2 is approximately equal to the specified scalar.
+     */
+    epsilonEqualsScalar: (k: number, e: number) => boolean;
+    /**
+     * Returns a string representation of this Vec2.
+     */
+    toString: () => string;
+
+    /**
+     * Creates a Vec2 struct backed by the specified data.
+     */
+    constructor(data = new Float32Array(2)) {
+        super(data);
     }
 
     /**
@@ -453,162 +351,9 @@ export class Vec2Struct extends Struct<Float32Array> {
     set y(value: number) {
         this.data[1] = value;
     }
-
-    /**
-     * Sets each component of this Vec2 to that of the other Vec2.
-     */
-    set(other: Vec2) {
-        return Vec2.set(this, other);
-    }
-
-    /**
-     * Sets each component of this Vec2.
-     */
-    set$(x: number, y: number) {
-        return Vec2.set$(this, x, y);
-    }
-
-    /**
-     * Sets each component of this Vec2 to the specified scalar.
-     */
-    setScalar(k: number) {
-        return Vec2.setScalar(this, k);
-    }
-
-    /**
-     * Adds the other Vec2 to this Vec2 componentwise.
-     */
-    add(other: Vec2) {
-        return Vec2.add(this, other);
-    }
-
-    /**
-     * Adds the specified values to this Vec2 componentwise.
-     */
-    add$(x: number, y: number) {
-        return Vec2.add$(this, x, y);
-    }
-
-    /**
-     * Subtracts the other Vec2 from this Vec2 componentwise.
-     */
-    subtract(other: Vec2) {
-        return Vec2.subtract(this, other);
-    }
-
-    /**
-     * Subtracts the specified values from this Vec2 componentwise.
-     */
-    subtract$(x: number, y: number) {
-        return Vec2.subtract$(this, x, y);
-    }
-
-    /**
-     * Multiplies each component of this Vec2 by the specified scalar.
-     */
-    mulScalar(k: number) {
-        return Vec2.mulScalar(this, k);
-    }
-
-    /**
-     * Divides each component of this Vec2 by the specified scalar.
-     */
-    divScalar(k: number) {
-        return Vec2.divScalar(this, k);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is equal to that of the other Vec2.
-     */
-    equals(other: Vec2) {
-        return Vec2.equals(this, other);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is equal to the specified scalar.
-     */
-    equalsScalar(k: number) {
-        return Vec2.equalsScalar(this, k);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
-     */
-    epsilonEquals(other: Vec2, e: number) {
-        return Vec2.epsilonEquals(this, other, e);
-    }
-
-    /**
-     * Checks if each component of this Vec2 is approximately equal to the specified scalar.
-     */
-    epsilonEqualsScalar(k: number, e: number) {
-        return Vec2.epsilonEqualsScalar(this, k, e);
-    }
-
-    /**
-     * Returns a string representation of this Vec2.
-     */
-    toString() {
-        return Vec2.toString(this);
-    }
-
-    /**
-     * Computes the length of this Vec2.
-     */
-    length() {
-        return Vec2.length(this);
-    }
-
-    /**
-     * Computes the length squared of this Vec2.
-     */
-    length2() {
-        return Vec2.length2(this);
-    }
-
-    /**
-     * Sets this Vec2 to a vector from the initial point to the terminal point. 
-     */
-    setFromPointToPoint(initial: Point, terminal: Point) {
-        return Vec2.setFromPointToPoint(this, initial, terminal);
-    }
-
-    /**
-     * Computes the dot product of this Vec2 with the other Vec2.
-     */
-    dot(other: Vec2) {
-        return Vec2.dot(this, other);
-    }
-
-    /**
-     * Computes the cross product of this Vec2 with the other Vec2.
-     */
-    cross(other: Vec2) {
-        return Vec2.cross(this, other);
-    }
-
-    /**
-     * Normalizes this Vec2 so that it has a length of one.
-     */
-    normalize() {
-        return Vec2.normalize(this);
-    }
-
-    /**
-     * Rotates this Vec2 90 degrees to the left (CCW).
-     */
-    rotateLeft() {
-        return Vec2.rotateLeft(this);
-    }
-
-    /**
-     * Rotates this Vec2 90 degrees to the right (CW).
-     */
-    rotateRight() {
-        return Vec2.rotateRight(this);
-    }
 }
 
+applyMixins(Vec2Struct, Vec2);
 /**
  * A Vec2 buffer backed by a Float32Array.
  */
@@ -619,6 +364,95 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     static create(capacity: number) {
         return new Vec2Buffer(new Float32Array(capacity * 2));
     }
+
+    /**
+     * Computes the length of this Vec2.
+     */
+    length: () => number;
+    /**
+     * Computes the length squared of this Vec2.
+     */
+    length2: () => number;
+    /**
+     * Sets this Vec2 to a vector from the initial point to the terminal point. 
+     */
+    setFromPointToPoint: (initial: Point, terminal: Point) => void;
+    /**
+     * Computes the dot product of this Vec2 with the other Vec2.
+     */
+    dot: (other: Vec2) => number;
+    /**
+     * Computes the cross product of this Vec2 with the other Vec2.
+     */
+    cross: (other: Vec2) => number;
+    /**
+     * Normalizes this Vec2 so that it has a length of one.
+     */
+    normalize: () => void;
+    /**
+     * Rotates this Vec2 90 degrees to the left (CCW).
+     */
+    rotateLeft: () => void;
+    /**
+     * Rotates this Vec2 90 degrees to the right (CW).
+     */
+    rotateRight: () => void;
+    /**
+     * Sets each component of this Vec2 to that of the other Vec2.
+     */
+    set: (other: Vec2) => void;
+    /**
+     * Sets each component of this Vec2.
+     */
+    set$: (x: number, y: number) => void;
+    /**
+     * Sets each component of this Vec2 to the specified scalar.
+     */
+    setScalar: (k: number) => void;
+    /**
+     * Adds the other Vec2 to this Vec2 componentwise.
+     */
+    add: (other: Vec2) => void;
+    /**
+     * Adds the specified values to this Vec2 componentwise.
+     */
+    add$: (x: number, y: number) => void;
+    /**
+     * Subtracts the other Vec2 from this Vec2 componentwise.
+     */
+    subtract: (other: Vec2) => void;
+    /**
+     * Subtracts the specified values from this Vec2 componentwise.
+     */
+    subtract$: (x: number, y: number) => void;
+    /**
+     * Multiplies each component of this Vec2 by the specified scalar.
+     */
+    mulScalar: (k: number) => void;
+    /**
+     * Divides each component of this Vec2 by the specified scalar.
+     */
+    divScalar: (k: number) => void;
+    /**
+     * Checks if each component of this Vec2 is exactly equal to that of the other Vec2.
+     */
+    equals: (other: Vec2) => boolean;
+    /**
+     * Checks if each component of this Vec2 is exactly equal to the specified scalar.
+     */
+    equalsScalar: (k: number) => boolean;
+    /**
+     * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
+     */
+    epsilonEquals: (other: Vec2, e: number) => boolean;
+    /**
+     * Checks if each component of this Vec2 is approximately equal to the specified scalar.
+     */
+    epsilonEqualsScalar: (k: number, e: number) => boolean;
+    /**
+     * Returns a string representation of this Vec2.
+     */
+    toString: () => string;
 
     /**
      * The X component of the current Vec2.
@@ -649,180 +483,64 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     }
 
     /**
-     * Gets the number of components in a Vec2, namely 2.
+     * Gets the number of properties in a Vec2, namely 2.
      */
     structLength() {
         return 2;
     }
 
     /**
+     * Gets the components of the Vec2 at the specified position of this buffer.
+     */
+    aget(position: number, dst = new Vec2()) {
+        let dataPos = position * this.structLength();
+        dst.x = this.data[dataPos++];
+        dst.y = this.data[dataPos++];
+        return dst;
+    }
+
+    /**
+     * Gets the components of the current Vec2, then moves to the next position of this buffer.
+     */
+    rget(position: number, dst = new Vec2()) {
+        dst.x = this.data[this.dataPosition++];
+        dst.y = this.data[this.dataPosition++];
+        return dst;
+    }
+
+    /**
+     * Sets each component of the Vec2 at the specified position to that of the src Vec2.
+     */
+    aset(position: number, src: Vec2) {
+        let dataPos = position * this.structLength();
+        this.data[dataPos++] = src.x;
+        this.data[dataPos++] = src.y;
+    }
+
+    /**
      * Sets each component of the Vec2 at the specified position.
      */
-    set$(position: number, x: number, y: number) {
+    aset$(position: number, x: number, y: number) {
         let dataPos = position * this.structLength();
         this.data[dataPos++] = x;
         this.data[dataPos++] = y;
     }
 
     /**
+     * Sets each component of the current Vec2 to that of the src Vec2, then moves to the next position of this buffer.
+     */
+    rset(src: Vec2) {
+        this.data[this.dataPosition++] = src.x;
+        this.data[this.dataPosition++] = src.y;
+    }
+
+    /**
      * Sets each component of the current Vec2, then moves to the next position of this buffer.
      */
-    put$(x: number, y: number) {
+    rset$(x: number, y: number) {
         this.data[this.dataPosition++] = x;
         this.data[this.dataPosition++] = y;
     }
-
-    /**
-     * Sets each component of the current Vec2 to that of the other Vec2.
-     */
-    $set(other: Vec2) {
-        return Vec2.set(this, other);
-    }
-
-    /**
-     * Sets each component of the current Vec2.
-     */
-    $set$(x: number, y: number) {
-        return Vec2.set$(this, x, y);
-    }
-
-    /**
-     * Sets each component of the current Vec2 to the specified scalar.
-     */
-    $setScalar(k: number) {
-        return Vec2.setScalar(this, k);
-    }
-
-    /**
-     * Adds the other Vec2 to the current Vec2 componentwise.
-     */
-    $add(other: Vec2) {
-        return Vec2.add(this, other);
-    }
-
-    /**
-     * Adds the specified values to the current Vec2 componentwise.
-     */
-    $add$(x: number, y: number) {
-        return Vec2.add$(this, x, y);
-    }
-
-    /**
-     * Subtracts the other Vec2 from the current Vec2 componentwise.
-     */
-    $subtract(other: Vec2) {
-        return Vec2.subtract(this, other);
-    }
-
-    /**
-     * Subtracts the specified values from the current Vec2 componentwise.
-     */
-    $subtract$(x: number, y: number) {
-        return Vec2.subtract$(this, x, y);
-    }
-
-    /**
-     * Multiplies each component of the current Vec2 by the specified scalar.
-     */
-    $mulScalar(k: number) {
-        return Vec2.mulScalar(this, k);
-    }
-
-    /**
-     * Divides each component of the current Vec2 by the specified scalar.
-     */
-    $divScalar(k: number) {
-        return Vec2.divScalar(this, k);
-    }
-
-    /**
-     * Checks if each component of the current Vec2 is equal to that of the other Vec2.
-     */
-    $equals(other: Vec2) {
-        return Vec2.equals(this, other);
-    }
-
-    /**
-     * Checks if each component of the current Vec2 is equal to the specified scalar.
-     */
-    $equalsScalar(k: number) {
-        return Vec2.equalsScalar(this, k);
-    }
-
-    /**
-     * Checks if each component of the current Vec2 is approximately equal to that of the other Vec2.
-     */
-    $epsilonEquals(other: Vec2, e: number) {
-        return Vec2.epsilonEquals(this, other, e);
-    }
-
-    /**
-     * Checks if each component of the current Vec2 is approximately equal to the specified scalar.
-     */
-    $epsilonEqualsScalar(k: number, e: number) {
-        return Vec2.epsilonEqualsScalar(this, k, e);
-    }
-
-    /**
-     * Returns a string representation of the current Vec2.
-     */
-    $toString() {
-        return Vec2.toString(this);
-    }
-
-    /**
-     * Computes the length of the current Vec2.
-     */
-    $length() {
-        return Vec2.length(this);
-    }
-
-    /**
-     * Computes the length squared of the current Vec2.
-     */
-    $length2() {
-        return Vec2.length2(this);
-    }
-
-    /**
-     * Sets the current Vec2 to a vector from the initial point to the terminal point. 
-     */
-    $setFromPointToPoint(initial: Point, terminal: Point) {
-        return Vec2.setFromPointToPoint(this, initial, terminal);
-    }
-
-    /**
-     * Computes the dot product of the current Vec2 with the other Vec2.
-     */
-    $dot(other: Vec2) {
-        return Vec2.dot(this, other);
-    }
-
-    /**
-     * Computes the cross product of the current Vec2 with the other Vec2.
-     */
-    $cross(other: Vec2) {
-        return Vec2.cross(this, other);
-    }
-
-    /**
-     * Normalizes the current Vec2 so that it has a length of one.
-     */
-    $normalize() {
-        return Vec2.normalize(this);
-    }
-
-    /**
-     * Rotates the current Vec2 90 degrees to the left (CCW).
-     */
-    $rotateLeft() {
-        return Vec2.rotateLeft(this);
-    }
-
-    /**
-     * Rotates the current Vec2 90 degrees to the right (CW).
-     */
-    $rotateRight() {
-        return Vec2.rotateRight(this);
-    }
 }
+
+applyMixins(Vec2Buffer, Vec2);

@@ -1,9 +1,9 @@
-﻿import {Template} from "gulp-structify/template";
+﻿import { Template } from 'gulp-structify/template';
 
 /**
   * An 8-bit (r,g,b,a) color.
   */
-class Color extends Template<Uint8Array>{
+class Color extends Template<Uint8Array> {
     /**
      * The red component of this Color.
      */
