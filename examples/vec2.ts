@@ -14,7 +14,7 @@ export class Vec2 {
         return vec2;
     }
 
-    static create(other: Vec2) {
+    static create(other: Vec2Like) {
         let vec2 = new Vec2();
         vec2.set(other);
         return vec2;
@@ -101,7 +101,7 @@ export class Vec2 {
     /**
      * Sets each component of this Vec2 to that of the other Vec2.
      */
-    set(other: Vec2) {
+    set(other: Vec2Like) {
         this.x = other.x;
         this.y = other.y;
     }
@@ -125,7 +125,7 @@ export class Vec2 {
     /**
      * Adds the other Vec2 to this Vec2 componentwise.
      */
-    add(other: Vec2) {
+    add(other: Vec2Like) {
         this.x += other.x;
         this.y += other.y;
     }
@@ -141,7 +141,7 @@ export class Vec2 {
     /**
      * Subtracts the other Vec2 from this Vec2 componentwise.
      */
-    subtract(other: Vec2) {
+    subtract(other: Vec2Like) {
         this.x -= other.x;
         this.y -= other.y;
     }
@@ -173,7 +173,7 @@ export class Vec2 {
     /**
      * Checks if each component of this Vec2 is exactly equal to that of the other Vec2.
      */
-    equals(other: Vec2) {
+    equals(other: Vec2Like) {
         return this.x === other.x && this.y === other.y;
     }
 
@@ -187,7 +187,7 @@ export class Vec2 {
     /**
      * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
      */
-    epsilonEquals(other: Vec2, e: number) {
+    epsilonEquals(other: Vec2Like, e: number) {
         return Math.abs(this.x - other.x) <= e && Math.abs(this.y - other.y) <= e;
     }
 
@@ -207,6 +207,20 @@ export class Vec2 {
 }
 
 /**
+ * A two-dimensional vector with (x,y) components.
+ */
+export interface Vec2Like {
+    /**
+     * The X component of this Vec2.
+     */
+    x: number;
+    /**
+     * The Y component of this Vec2.
+     */
+    y: number;
+}
+
+/**
  * A Vec2 backed by a Float32Array.
  */
 export class Vec2Struct extends Struct<Float32Array> {
@@ -216,7 +230,7 @@ export class Vec2Struct extends Struct<Float32Array> {
         return vec2;
     }
 
-    static create(other: Vec2) {
+    static create(other: Vec2Like) {
         let vec2 = new Vec2Struct();
         vec2.set(other);
         return vec2;
@@ -263,7 +277,7 @@ export class Vec2Struct extends Struct<Float32Array> {
     /**
      * Sets each component of this Vec2 to that of the other Vec2.
      */
-    set: (other: Vec2) => void;
+    set: (other: Vec2Like) => void;
     /**
      * Sets each component of this Vec2.
      */
@@ -275,7 +289,7 @@ export class Vec2Struct extends Struct<Float32Array> {
     /**
      * Adds the other Vec2 to this Vec2 componentwise.
      */
-    add: (other: Vec2) => void;
+    add: (other: Vec2Like) => void;
     /**
      * Adds the specified values to this Vec2 componentwise.
      */
@@ -283,7 +297,7 @@ export class Vec2Struct extends Struct<Float32Array> {
     /**
      * Subtracts the other Vec2 from this Vec2 componentwise.
      */
-    subtract: (other: Vec2) => void;
+    subtract: (other: Vec2Like) => void;
     /**
      * Subtracts the specified values from this Vec2 componentwise.
      */
@@ -299,7 +313,7 @@ export class Vec2Struct extends Struct<Float32Array> {
     /**
      * Checks if each component of this Vec2 is exactly equal to that of the other Vec2.
      */
-    equals: (other: Vec2) => boolean;
+    equals: (other: Vec2Like) => boolean;
     /**
      * Checks if each component of this Vec2 is exactly equal to the specified scalar.
      */
@@ -307,7 +321,7 @@ export class Vec2Struct extends Struct<Float32Array> {
     /**
      * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
      */
-    epsilonEquals: (other: Vec2, e: number) => boolean;
+    epsilonEquals: (other: Vec2Like, e: number) => boolean;
     /**
      * Checks if each component of this Vec2 is approximately equal to the specified scalar.
      */
@@ -400,7 +414,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Sets each component of this Vec2 to that of the other Vec2.
      */
-    set: (other: Vec2) => void;
+    set: (other: Vec2Like) => void;
     /**
      * Sets each component of this Vec2.
      */
@@ -412,7 +426,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Adds the other Vec2 to this Vec2 componentwise.
      */
-    add: (other: Vec2) => void;
+    add: (other: Vec2Like) => void;
     /**
      * Adds the specified values to this Vec2 componentwise.
      */
@@ -420,7 +434,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Subtracts the other Vec2 from this Vec2 componentwise.
      */
-    subtract: (other: Vec2) => void;
+    subtract: (other: Vec2Like) => void;
     /**
      * Subtracts the specified values from this Vec2 componentwise.
      */
@@ -436,7 +450,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Checks if each component of this Vec2 is exactly equal to that of the other Vec2.
      */
-    equals: (other: Vec2) => boolean;
+    equals: (other: Vec2Like) => boolean;
     /**
      * Checks if each component of this Vec2 is exactly equal to the specified scalar.
      */
@@ -444,7 +458,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Checks if each component of this Vec2 is approximately equal to that of the other Vec2.
      */
-    epsilonEquals: (other: Vec2, e: number) => boolean;
+    epsilonEquals: (other: Vec2Like, e: number) => boolean;
     /**
      * Checks if each component of this Vec2 is approximately equal to the specified scalar.
      */
@@ -492,7 +506,8 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Gets the components of the Vec2 at the specified position of this buffer.
      */
-    aget(position: number, dst = new Vec2()) {
+    aget(position: number, dst?: Vec2Like) {
+        if (dst === void 0){ dst = new Vec2()};
         let dataPos = position * this.structLength();
         dst.x = this.data[dataPos++];
         dst.y = this.data[dataPos++];
@@ -502,7 +517,8 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Gets the components of the current Vec2, then moves to the next position of this buffer.
      */
-    rget(position: number, dst = new Vec2()) {
+    rget(position: number, dst?: Vec2Like) {
+        if (dst === void 0){ dst = new Vec2()};
         dst.x = this.data[this.dataPosition++];
         dst.y = this.data[this.dataPosition++];
         return dst;
@@ -511,7 +527,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Sets each component of the Vec2 at the specified position to that of the src Vec2.
      */
-    aset(position: number, src: Vec2) {
+    aset(position: number, src: Vec2Like) {
         let dataPos = position * this.structLength();
         this.data[dataPos++] = src.x;
         this.data[dataPos++] = src.y;
@@ -529,7 +545,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Sets each component of the current Vec2 to that of the src Vec2, then moves to the next position of this buffer.
      */
-    rset(src: Vec2) {
+    rset(src: Vec2Like) {
         this.data[this.dataPosition++] = src.x;
         this.data[this.dataPosition++] = src.y;
     }

@@ -13,7 +13,7 @@ export class Point {
         return point;
     }
 
-    static create(other: Point) {
+    static create(other: PointLike) {
         let point = new Point();
         point.set(other);
         return point;
@@ -65,7 +65,7 @@ export class Point {
     /**
      * Sets each component of this Point to that of the other Point.
      */
-    set(other: Point) {
+    set(other: PointLike) {
         this.x = other.x;
         this.y = other.y;
     }
@@ -89,7 +89,7 @@ export class Point {
     /**
      * Adds the other Point to this Point componentwise.
      */
-    add(other: Point) {
+    add(other: PointLike) {
         this.x += other.x;
         this.y += other.y;
     }
@@ -105,7 +105,7 @@ export class Point {
     /**
      * Subtracts the other Point from this Point componentwise.
      */
-    subtract(other: Point) {
+    subtract(other: PointLike) {
         this.x -= other.x;
         this.y -= other.y;
     }
@@ -137,7 +137,7 @@ export class Point {
     /**
      * Checks if each component of this Point is exactly equal to that of the other Point.
      */
-    equals(other: Point) {
+    equals(other: PointLike) {
         return this.x === other.x && this.y === other.y;
     }
 
@@ -151,7 +151,7 @@ export class Point {
     /**
      * Checks if each component of this Point is approximately equal to that of the other Point.
      */
-    epsilonEquals(other: Point, e: number) {
+    epsilonEquals(other: PointLike, e: number) {
         return Math.abs(this.x - other.x) <= e && Math.abs(this.y - other.y) <= e;
     }
 
@@ -171,6 +171,20 @@ export class Point {
 }
 
 /**
+ * Point with x and y coordinates.
+ */
+export interface PointLike {
+    /**
+     * The X coordinate of this point.
+     */
+    x: number;
+    /**
+     * The Y coordinate of this point.
+     */
+    y: number;
+}
+
+/**
  * A Point backed by a Float32Array.
  */
 export class PointStruct extends Struct<Float32Array> {
@@ -180,7 +194,7 @@ export class PointStruct extends Struct<Float32Array> {
         return point;
     }
 
-    static create(other: Point) {
+    static create(other: PointLike) {
         let point = new PointStruct();
         point.set(other);
         return point;
@@ -209,7 +223,7 @@ export class PointStruct extends Struct<Float32Array> {
     /**
      * Sets each component of this Point to that of the other Point.
      */
-    set: (other: Point) => void;
+    set: (other: PointLike) => void;
     /**
      * Sets each component of this Point.
      */
@@ -221,7 +235,7 @@ export class PointStruct extends Struct<Float32Array> {
     /**
      * Adds the other Point to this Point componentwise.
      */
-    add: (other: Point) => void;
+    add: (other: PointLike) => void;
     /**
      * Adds the specified values to this Point componentwise.
      */
@@ -229,7 +243,7 @@ export class PointStruct extends Struct<Float32Array> {
     /**
      * Subtracts the other Point from this Point componentwise.
      */
-    subtract: (other: Point) => void;
+    subtract: (other: PointLike) => void;
     /**
      * Subtracts the specified values from this Point componentwise.
      */
@@ -245,7 +259,7 @@ export class PointStruct extends Struct<Float32Array> {
     /**
      * Checks if each component of this Point is exactly equal to that of the other Point.
      */
-    equals: (other: Point) => boolean;
+    equals: (other: PointLike) => boolean;
     /**
      * Checks if each component of this Point is exactly equal to the specified scalar.
      */
@@ -253,7 +267,7 @@ export class PointStruct extends Struct<Float32Array> {
     /**
      * Checks if each component of this Point is approximately equal to that of the other Point.
      */
-    epsilonEquals: (other: Point, e: number) => boolean;
+    epsilonEquals: (other: PointLike, e: number) => boolean;
     /**
      * Checks if each component of this Point is approximately equal to the specified scalar.
      */
@@ -328,7 +342,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Sets each component of this Point to that of the other Point.
      */
-    set: (other: Point) => void;
+    set: (other: PointLike) => void;
     /**
      * Sets each component of this Point.
      */
@@ -340,7 +354,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Adds the other Point to this Point componentwise.
      */
-    add: (other: Point) => void;
+    add: (other: PointLike) => void;
     /**
      * Adds the specified values to this Point componentwise.
      */
@@ -348,7 +362,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Subtracts the other Point from this Point componentwise.
      */
-    subtract: (other: Point) => void;
+    subtract: (other: PointLike) => void;
     /**
      * Subtracts the specified values from this Point componentwise.
      */
@@ -364,7 +378,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Checks if each component of this Point is exactly equal to that of the other Point.
      */
-    equals: (other: Point) => boolean;
+    equals: (other: PointLike) => boolean;
     /**
      * Checks if each component of this Point is exactly equal to the specified scalar.
      */
@@ -372,7 +386,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Checks if each component of this Point is approximately equal to that of the other Point.
      */
-    epsilonEquals: (other: Point, e: number) => boolean;
+    epsilonEquals: (other: PointLike, e: number) => boolean;
     /**
      * Checks if each component of this Point is approximately equal to the specified scalar.
      */
@@ -420,7 +434,8 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Gets the components of the Point at the specified position of this buffer.
      */
-    aget(position: number, dst = new Point()) {
+    aget(position: number, dst?: PointLike) {
+        if (dst === void 0){ dst = new Point()};
         let dataPos = position * this.structLength();
         dst.x = this.data[dataPos++];
         dst.y = this.data[dataPos++];
@@ -430,7 +445,8 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Gets the components of the current Point, then moves to the next position of this buffer.
      */
-    rget(position: number, dst = new Point()) {
+    rget(position: number, dst?: PointLike) {
+        if (dst === void 0){ dst = new Point()};
         dst.x = this.data[this.dataPosition++];
         dst.y = this.data[this.dataPosition++];
         return dst;
@@ -439,7 +455,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Sets each component of the Point at the specified position to that of the src Point.
      */
-    aset(position: number, src: Point) {
+    aset(position: number, src: PointLike) {
         let dataPos = position * this.structLength();
         this.data[dataPos++] = src.x;
         this.data[dataPos++] = src.y;
@@ -457,7 +473,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Sets each component of the current Point to that of the src Point, then moves to the next position of this buffer.
      */
-    rset(src: Point) {
+    rset(src: PointLike) {
         this.data[this.dataPosition++] = src.x;
         this.data[this.dataPosition++] = src.y;
     }

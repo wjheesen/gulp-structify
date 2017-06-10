@@ -25,7 +25,7 @@ export class Color {
         return color;
     }
 
-    static create(other: Color) {
+    static create(other: ColorLike) {
         let color = new Color();
         color.set(other);
         return color;
@@ -141,7 +141,7 @@ export class Color {
     /**
      * Sets each component of this Color to that of the other Color.
      */
-    set(other: Color) {
+    set(other: ColorLike) {
         this.r = other.r;
         this.g = other.g;
         this.b = other.b;
@@ -171,7 +171,7 @@ export class Color {
     /**
      * Adds the other Color to this Color componentwise.
      */
-    add(other: Color) {
+    add(other: ColorLike) {
         this.r += other.r;
         this.g += other.g;
         this.b += other.b;
@@ -191,7 +191,7 @@ export class Color {
     /**
      * Subtracts the other Color from this Color componentwise.
      */
-    subtract(other: Color) {
+    subtract(other: ColorLike) {
         this.r -= other.r;
         this.g -= other.g;
         this.b -= other.b;
@@ -231,7 +231,7 @@ export class Color {
     /**
      * Checks if each component of this Color is exactly equal to that of the other Color.
      */
-    equals(other: Color) {
+    equals(other: ColorLike) {
         return this.r === other.r && this.g === other.g && this.b === other.b && this.a === other.a;
     }
 
@@ -245,7 +245,7 @@ export class Color {
     /**
      * Checks if each component of this Color is approximately equal to that of the other Color.
      */
-    epsilonEquals(other: Color, e: number) {
+    epsilonEquals(other: ColorLike, e: number) {
         return Math.abs(this.r - other.r) <= e && Math.abs(this.g - other.g) <= e && Math.abs(this.b - other.b) <= e && Math.abs(this.a - other.a) <= e;
     }
 
@@ -278,6 +278,28 @@ function randomInt(min: number, max: number) {
 }
 
 /**
+ * An 8-bit (r,g,b,a) color.
+ */
+export interface ColorLike {
+    /**
+     * The red component of this Color.
+     */
+    r: number;
+    /**
+     * The green component of this Color.
+     */
+    g: number;
+    /**
+     * The blue component of this Color.
+     */
+    b: number;
+    /**
+     * The alpha component of this Color.
+     */
+    a: number;
+}
+
+/**
  * A Color backed by a Uint8Array.
  */
 export class ColorStruct extends Struct<Uint8Array> {
@@ -299,7 +321,7 @@ export class ColorStruct extends Struct<Uint8Array> {
         return color;
     }
 
-    static create(other: Color) {
+    static create(other: ColorLike) {
         let color = new ColorStruct();
         color.set(other);
         return color;
@@ -350,7 +372,7 @@ export class ColorStruct extends Struct<Uint8Array> {
     /**
      * Sets each component of this Color to that of the other Color.
      */
-    set: (other: Color) => void;
+    set: (other: ColorLike) => void;
     /**
      * Sets each component of this Color.
      */
@@ -362,7 +384,7 @@ export class ColorStruct extends Struct<Uint8Array> {
     /**
      * Adds the other Color to this Color componentwise.
      */
-    add: (other: Color) => void;
+    add: (other: ColorLike) => void;
     /**
      * Adds the specified values to this Color componentwise.
      */
@@ -370,7 +392,7 @@ export class ColorStruct extends Struct<Uint8Array> {
     /**
      * Subtracts the other Color from this Color componentwise.
      */
-    subtract: (other: Color) => void;
+    subtract: (other: ColorLike) => void;
     /**
      * Subtracts the specified values from this Color componentwise.
      */
@@ -386,7 +408,7 @@ export class ColorStruct extends Struct<Uint8Array> {
     /**
      * Checks if each component of this Color is exactly equal to that of the other Color.
      */
-    equals: (other: Color) => boolean;
+    equals: (other: ColorLike) => boolean;
     /**
      * Checks if each component of this Color is exactly equal to the specified scalar.
      */
@@ -394,7 +416,7 @@ export class ColorStruct extends Struct<Uint8Array> {
     /**
      * Checks if each component of this Color is approximately equal to that of the other Color.
      */
-    epsilonEquals: (other: Color, e: number) => boolean;
+    epsilonEquals: (other: ColorLike, e: number) => boolean;
     /**
      * Checks if each component of this Color is approximately equal to the specified scalar.
      */
@@ -519,7 +541,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Sets each component of this Color to that of the other Color.
      */
-    set: (other: Color) => void;
+    set: (other: ColorLike) => void;
     /**
      * Sets each component of this Color.
      */
@@ -531,7 +553,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Adds the other Color to this Color componentwise.
      */
-    add: (other: Color) => void;
+    add: (other: ColorLike) => void;
     /**
      * Adds the specified values to this Color componentwise.
      */
@@ -539,7 +561,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Subtracts the other Color from this Color componentwise.
      */
-    subtract: (other: Color) => void;
+    subtract: (other: ColorLike) => void;
     /**
      * Subtracts the specified values from this Color componentwise.
      */
@@ -555,7 +577,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Checks if each component of this Color is exactly equal to that of the other Color.
      */
-    equals: (other: Color) => boolean;
+    equals: (other: ColorLike) => boolean;
     /**
      * Checks if each component of this Color is exactly equal to the specified scalar.
      */
@@ -563,7 +585,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Checks if each component of this Color is approximately equal to that of the other Color.
      */
-    epsilonEquals: (other: Color, e: number) => boolean;
+    epsilonEquals: (other: ColorLike, e: number) => boolean;
     /**
      * Checks if each component of this Color is approximately equal to the specified scalar.
      */
@@ -639,7 +661,8 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Gets the components of the Color at the specified position of this buffer.
      */
-    aget(position: number, dst = new Color()) {
+    aget(position: number, dst?: ColorLike) {
+        if (dst === void 0){ dst = new Color()};
         let dataPos = position * this.structLength();
         dst.r = this.data[dataPos++];
         dst.g = this.data[dataPos++];
@@ -651,7 +674,8 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Gets the components of the current Color, then moves to the next position of this buffer.
      */
-    rget(position: number, dst = new Color()) {
+    rget(position: number, dst?: ColorLike) {
+        if (dst === void 0){ dst = new Color()};
         dst.r = this.data[this.dataPosition++];
         dst.g = this.data[this.dataPosition++];
         dst.b = this.data[this.dataPosition++];
@@ -662,7 +686,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Sets each component of the Color at the specified position to that of the src Color.
      */
-    aset(position: number, src: Color) {
+    aset(position: number, src: ColorLike) {
         let dataPos = position * this.structLength();
         this.data[dataPos++] = src.r;
         this.data[dataPos++] = src.g;
@@ -684,7 +708,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Sets each component of the current Color to that of the src Color, then moves to the next position of this buffer.
      */
-    rset(src: Color) {
+    rset(src: ColorLike) {
         this.data[this.dataPosition++] = src.r;
         this.data[this.dataPosition++] = src.g;
         this.data[this.dataPosition++] = src.b;

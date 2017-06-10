@@ -47,6 +47,7 @@ export = function structify(): stream.Transform {
 function transformFile(file: FileDefinition, template: ClassDefinition) {
     // destructure src file
     let className = template.name;
+    let interfaceName = `${className}Like`;
     let decapClassName = decapitalize(className);
     let properties = normalizeProperties(template.properties);
     let documentation = template.documentationComment;
@@ -69,6 +70,15 @@ function transformFile(file: FileDefinition, template: ClassDefinition) {
     file.addImport({
         moduleSpecifier: 'gulp-structify/mixin',
         namedImports: [{name: 'applyMixins'}] 
+    })
+
+    // Add interface with properties copied from template
+
+    file.addInterface({
+        name: interfaceName,
+        isExported: true,
+        documentationComment: documentation,
+        properties: properties
     })
 
     // Remove template super class
@@ -159,7 +169,7 @@ function transformFile(file: FileDefinition, template: ClassDefinition) {
         let e = "e";
         let k = "k";
 
-        let p_other = { name: other, type: className };
+        let p_other = { name: other, type: interfaceName };
         let p_k = { name: k, type: 'number' };
         let p_e = { name: e, type: 'number' };
 
@@ -382,8 +392,8 @@ function transformFile(file: FileDefinition, template: ClassDefinition) {
 
     function addMethodsToStructBuffer(){
         let p_position = { name: "position", type: "number" };
-        let p_src = { name: "src", type: className };
-        let p_dst = { name: "dst", type: className, defaultExpression: `new ${className}()` };
+        let p_src = { name: "src", type: interfaceName };
+        let p_dst = { name: "dst", type: interfaceName, isOptional: true };
         buffer.addMethod({
             name: "structLength",
             documentationComment: `Gets the number of properties in a ${className}, namely ${properties.length}.`,
@@ -396,6 +406,7 @@ function transformFile(file: FileDefinition, template: ClassDefinition) {
             parameters: [p_position, p_dst],
             documentationComment: `Gets the components of the ${className} at the specified position of this buffer.`,
             onWriteFunctionBody: writer => {
+                writer.newLine().write(`if (${p_dst.name} === void 0){ ${p_dst.name} = new ${className}()};`);
                 writer.newLine().write(`let dataPos = position * this.structLength();`)
                 for (let prop of properties) {
                     writer.newLine().write(`${p_dst.name}.${prop.name} = this.data[dataPos++];`)
@@ -408,6 +419,7 @@ function transformFile(file: FileDefinition, template: ClassDefinition) {
             parameters: [p_position, p_dst],
             documentationComment: `Gets the components of the current ${className}, then moves to the next position of this buffer.`,
             onWriteFunctionBody: writer => {
+                writer.newLine().write(`if (${p_dst.name} === void 0){ ${p_dst.name} = new ${className}()};`);
                 for (let prop of properties) {
                     writer.newLine().write(`${p_dst.name}.${prop.name} = this.data[this.dataPosition++];`)
                 }
