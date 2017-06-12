@@ -574,7 +574,12 @@ function normalizeMethodParams(params: ClassMethodParameterDefinition[]) {
 }
 
 function getMethodType(method: ClassMethodDefinition){
-    let paramsToString = method.parameters.map(param => param.name + ": " + param.type.text).join(", ");
+    let paramsToString = method.parameters.map(param => {
+        let name = param.name;
+        let type = param.type.text;
+        let isOptional = (param.isOptional || param.defaultExpression) ? "?" : "";
+        return `${name}${isOptional}: ${type}`;
+    }).join(", ");
     return `(${paramsToString}) => ${method.returnType.text}`;
 }
 

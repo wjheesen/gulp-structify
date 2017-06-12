@@ -214,12 +214,12 @@ export class PointStruct extends Struct<Float32Array> {
      * Computes the distance between this point and the other point.
      * @param other defaults to origin.
      */
-    distance: (other: PointLike) => number;
+    distance: (other?: PointLike) => number;
     /**
      * Computes the distance squared from this point to the other point.
      * @param other defaults to origin.
      */
-    distance2: (other: PointLike) => number;
+    distance2: (other?: PointLike) => number;
     /**
      * Sets each component of this Point to that of the other Point.
      */
@@ -333,12 +333,12 @@ export class PointBuffer extends StructBuffer<Float32Array> {
      * Computes the distance between this point and the other point.
      * @param other defaults to origin.
      */
-    distance: (other: PointLike) => number;
+    distance: (other?: PointLike) => number;
     /**
      * Computes the distance squared from this point to the other point.
      * @param other defaults to origin.
      */
-    distance2: (other: PointLike) => number;
+    distance2: (other?: PointLike) => number;
     /**
      * Sets each component of this Point to that of the other Point.
      */
