@@ -445,7 +445,7 @@ function transformFile(file: FileDefinition, template: ClassDefinition) {
         });
         buffer.addMethod({
             name: "rget",
-            parameters: [p_position, p_dst],
+            parameters: [p_dst],
             documentationComment: `Gets the components of the current ${className}, then moves to the next position of this buffer.`,
             onWriteFunctionBody: writer => {
                 writer.newLine().write(`if (${p_dst.name} === void 0){ ${p_dst.name} = new ${className}()};`);

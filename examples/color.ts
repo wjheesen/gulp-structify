@@ -674,7 +674,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Gets the components of the current Color, then moves to the next position of this buffer.
      */
-    rget(position: number, dst?: ColorLike) {
+    rget(dst?: ColorLike) {
         if (dst === void 0){ dst = new Color()};
         dst.r = this.data[this.dataPosition++];
         dst.g = this.data[this.dataPosition++];

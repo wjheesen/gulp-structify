@@ -517,7 +517,7 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Gets the components of the current Vec2, then moves to the next position of this buffer.
      */
-    rget(position: number, dst?: Vec2Like) {
+    rget(dst?: Vec2Like) {
         if (dst === void 0){ dst = new Vec2()};
         dst.x = this.data[this.dataPosition++];
         dst.y = this.data[this.dataPosition++];

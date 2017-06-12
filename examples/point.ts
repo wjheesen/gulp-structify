@@ -445,7 +445,7 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Gets the components of the current Point, then moves to the next position of this buffer.
      */
-    rget(position: number, dst?: PointLike) {
+    rget(dst?: PointLike) {
         if (dst === void 0){ dst = new Point()};
         dst.x = this.data[this.dataPosition++];
         dst.y = this.data[this.dataPosition++];
