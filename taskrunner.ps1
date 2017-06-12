@@ -17,7 +17,7 @@ function Update-Package(){
 }
 
 function Update-Gulpfile(){
-    tsc
+    tsc.cmd "$PSScriptRoot\gulpfile.ts"
 }
 
 function Update-Examples(){

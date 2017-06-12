@@ -1,5 +1,6 @@
-﻿import {Template} from "gulp-structify/template";
-import {Point} from './point';
+﻿import { Point } from './point';
+import { like } from 'gulp-structify/like';
+import { Template } from 'gulp-structify/template';
 
 /**
  * A two-dimensional vector with (x,y) components.
@@ -33,7 +34,7 @@ export class Vec2 extends Template<Float32Array> {
     /**
      * Sets this Vec2 to a vector from the initial point to the terminal point. 
      */
-    setFromPointToPoint(initial: Point, terminal: Point) {
+    setFromPointToPoint(@like initial: Point,@like terminal: Point) {
         this.x = terminal.x - initial.x;
         this.y = terminal.y - initial.y;
     }
@@ -41,14 +42,14 @@ export class Vec2 extends Template<Float32Array> {
     /**
      * Computes the dot product of this Vec2 with the other Vec2.
      */
-    dot(other: Vec2): number {
+    dot(@like other: Vec2): number {
         return this.x * other.x + this.y * other.y;
     }
 
     /**
      * Computes the cross product of this Vec2 with the other Vec2.
      */
-    cross(other: Vec2): number {
+    cross(@like other: Vec2): number {
         return (this.x * other.y) - (other.x * this.y);
     }
 

@@ -7,7 +7,7 @@ import {applyMixins} from "gulp-structify/mixin";
  * Point with x and y coordinates.
  */
 export class Point {
-    static midpoint(p1: Point, p2: Point) {
+    static midpoint(p1: PointLike, p2: PointLike) {
         let point = new Point();
         point.setMidpoint(p1, p2);
         return point;
@@ -39,7 +39,7 @@ export class Point {
     /**
      * Sets this point to the midpoint of p1 and p2.
      */
-    setMidpoint(p1: Point, p2: Point) {
+    setMidpoint(p1: PointLike, p2: PointLike) {
         this.x = 0.5 * (p1.x + p2.x);
         this.y = 0.5 * (p1.y + p2.y);
     }
@@ -48,7 +48,7 @@ export class Point {
      * Computes the distance between this point and the other point.
      * @param other defaults to origin.
      */
-    distance(other?: Point) {
+    distance(other?: PointLike) {
         return Math.sqrt(this.distance2(other));
     }
 
@@ -56,7 +56,7 @@ export class Point {
      * Computes the distance squared from this point to the other point.
      * @param other defaults to origin.
      */
-    distance2(other?: Point) {
+    distance2(other?: PointLike) {
         let dx = other ? other.x - this.x : this.x;
         let dy = other ? other.y - this.y : this.y;
         return dx * dx + dy * dy;
@@ -188,7 +188,7 @@ export interface PointLike {
  * A Point backed by a Float32Array.
  */
 export class PointStruct extends Struct<Float32Array> {
-    static midpoint(p1: Point, p2: Point) {
+    static midpoint(p1: PointLike, p2: PointLike) {
         let point = new PointStruct();
         point.setMidpoint(p1, p2);
         return point;
@@ -209,17 +209,17 @@ export class PointStruct extends Struct<Float32Array> {
     /**
      * Sets this point to the midpoint of p1 and p2.
      */
-    setMidpoint: (p1: Point, p2: Point) => void;
+    setMidpoint: (p1: PointLike, p2: PointLike) => void;
     /**
      * Computes the distance between this point and the other point.
      * @param other defaults to origin.
      */
-    distance: (other: Point) => number;
+    distance: (other: PointLike) => number;
     /**
      * Computes the distance squared from this point to the other point.
      * @param other defaults to origin.
      */
-    distance2: (other: Point) => number;
+    distance2: (other: PointLike) => number;
     /**
      * Sets each component of this Point to that of the other Point.
      */
@@ -328,17 +328,17 @@ export class PointBuffer extends StructBuffer<Float32Array> {
     /**
      * Sets this point to the midpoint of p1 and p2.
      */
-    setMidpoint: (p1: Point, p2: Point) => void;
+    setMidpoint: (p1: PointLike, p2: PointLike) => void;
     /**
      * Computes the distance between this point and the other point.
      * @param other defaults to origin.
      */
-    distance: (other: Point) => number;
+    distance: (other: PointLike) => number;
     /**
      * Computes the distance squared from this point to the other point.
      * @param other defaults to origin.
      */
-    distance2: (other: Point) => number;
+    distance2: (other: PointLike) => number;
     /**
      * Sets each component of this Point to that of the other Point.
      */

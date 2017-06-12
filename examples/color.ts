@@ -97,7 +97,7 @@ export class Color {
      * Creates an ARGB string from this Color's (r,g,b,a) components.
      * @returns string of the form #aarrggbb
      */
-    toArgbString(this: Color) {
+    toArgbString() {
         let r = pad(this.r.toString(16));
         let g = pad(this.g.toString(16));
         let b = pad(this.b.toString(16));
@@ -131,7 +131,7 @@ export class Color {
     /**
      * Blends the source color into this color using (src.alpha, 1-src.alpha) blend mode.
      */
-    blend(src: Color) {
+    blend(src: ColorLike) {
         let alpha = src.a + 1, invAlpha = 256 - src.a;
         this.r = (alpha * src.r + invAlpha * this.r) >> 8;
         this.g = (alpha * src.g + invAlpha * this.g) >> 8;
@@ -368,7 +368,7 @@ export class ColorStruct extends Struct<Uint8Array> {
     /**
      * Blends the source color into this color using (src.alpha, 1-src.alpha) blend mode.
      */
-    blend: (src: Color) => void;
+    blend: (src: ColorLike) => void;
     /**
      * Sets each component of this Color to that of the other Color.
      */
@@ -537,7 +537,7 @@ export class ColorBuffer extends StructBuffer<Uint8Array> {
     /**
      * Blends the source color into this color using (src.alpha, 1-src.alpha) blend mode.
      */
-    blend: (src: Color) => void;
+    blend: (src: ColorLike) => void;
     /**
      * Sets each component of this Color to that of the other Color.
      */

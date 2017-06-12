@@ -1,4 +1,5 @@
-﻿import { Template } from 'gulp-structify/template';
+﻿import { like } from 'gulp-structify/like';
+import { Template } from 'gulp-structify/template';
 
 /**
   * An 8-bit (r,g,b,a) color.
@@ -60,7 +61,7 @@ class Color extends Template<Uint8Array> {
      * Creates an ARGB string from this Color's (r,g,b,a) components.
      * @returns string of the form #aarrggbb
      */
-    toArgbString(this: Color) {
+    toArgbString() {
         let r = pad(this.r.toString(16)); // rr
         let g = pad(this.g.toString(16)); // gg
         let b = pad(this.b.toString(16)); // bb
@@ -94,7 +95,7 @@ class Color extends Template<Uint8Array> {
     /**
      * Blends the source color into this color using (src.alpha, 1-src.alpha) blend mode.
      */
-    blend(src: Color) {
+    blend(@like src: Color) {
         // Compute alpha and alpha inverse
         let alpha = src.a + 1, invAlpha = 256 - src.a;
         // Compute rgba components of result

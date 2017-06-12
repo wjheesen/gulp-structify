@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -9,5 +10,5 @@
     "noUnusedLocals": true,
     "target": "es5"
   },
-  "include": ["./*"]
+  "include": ["./**/*"]
 }

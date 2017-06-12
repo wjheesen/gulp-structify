@@ -2,7 +2,6 @@
   "extends": "../tsconfig",
   "compilerOptions": {
     "declaration": true,
-    "experimentalDecorators": true,
     "noUnusedLocals": false,
     "outDir": "../lib",
     "sourceMap": true

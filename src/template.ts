@@ -35,26 +35,26 @@ export class Template<T extends TypedArray>{
     /**
      * Checks if each component of this struct is equal to that of the other struct.
      */
-    equals(other: this) {}
+    equals(other: this) { return false; }
 
     /**
      * Checks if each component of this struct is equal to the specified scalar.
      */
-    equalsScalar(k: number) {}
+    equalsScalar(k: number) { return false; }
 
     /**
      * Checks if each component of this struct is approximately equal to that of the other struct.
      */
-    epsilonEquals(other: this, e: number) {}
+    epsilonEquals(other: this, e: number) { return false; }
 
     /**
      * Checks if each component of this struct is approximately equal to the specified scalar.
      */
-    epsilonEqualsScalar(k: number, e: number) {}
+    epsilonEqualsScalar(k: number, e: number) { return false; }
 
     /**
      * Returns a string representation of this struct.
      */
-    toString() {}
+    toString() { return <string> null; }
 }
 

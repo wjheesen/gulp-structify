@@ -62,14 +62,14 @@ export class Vec2 {
     /**
      * Computes the dot product of this Vec2 with the other Vec2.
      */
-    dot(other: Vec2) {
+    dot(other: Vec2Like) {
         return this.x * other.x + this.y * other.y;
     }
 
     /**
      * Computes the cross product of this Vec2 with the other Vec2.
      */
-    cross(other: Vec2) {
+    cross(other: Vec2Like) {
         return (this.x * other.y) - (other.x * this.y);
     }
 
@@ -257,11 +257,11 @@ export class Vec2Struct extends Struct<Float32Array> {
     /**
      * Computes the dot product of this Vec2 with the other Vec2.
      */
-    dot: (other: Vec2) => number;
+    dot: (other: Vec2Like) => number;
     /**
      * Computes the cross product of this Vec2 with the other Vec2.
      */
-    cross: (other: Vec2) => number;
+    cross: (other: Vec2Like) => number;
     /**
      * Normalizes this Vec2 so that it has a length of one.
      */
@@ -394,11 +394,11 @@ export class Vec2Buffer extends StructBuffer<Float32Array> {
     /**
      * Computes the dot product of this Vec2 with the other Vec2.
      */
-    dot: (other: Vec2) => number;
+    dot: (other: Vec2Like) => number;
     /**
      * Computes the cross product of this Vec2 with the other Vec2.
      */
-    cross: (other: Vec2) => number;
+    cross: (other: Vec2Like) => number;
     /**
      * Normalizes this Vec2 so that it has a length of one.
      */
