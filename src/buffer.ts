@@ -49,7 +49,12 @@ export abstract class StructBuffer<T extends TypedArray> {
      * Checks if the current position of this buffer is valid.
      */
     hasValidPosition() {
-        return 0 <= this.dataPosition && this.dataPosition < this.data.length;
+        let dataPos = this.dataPosition;
+        if(0 <= dataPos){
+            return (this.data.length - dataPos) >= this.structLength();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -105,12 +110,12 @@ export abstract class StructBuffer<T extends TypedArray> {
     }
 
     /**
-     * Copies data from the source buffer into this buffer beginning at the specified position.
+     * Copies data from the source buffer into this buffer beginning at the specified position, without modifying the position of either buffer.
      * @param position the offset into this buffer where the data should be copied.
-     * @param src buffer pointing to the other Struct.
-     * @param length the number of Structs to copy from the src array.
+     * @param src buffer pointing to the first struct that should be copied.
+     * @param length the number of Structs to copy from the src buffer.
      */
-    setFromBuffer(position: number, src: this, length: number) {
+    asetFromBuffer(position: number, src: this, length = src.capacity() - src.position()) {
         let srcPos = src.dataPosition;
         let dstPos = position * this.structLength();
         while (length--) {
@@ -122,16 +127,16 @@ export abstract class StructBuffer<T extends TypedArray> {
     }
 
     /**
-     * Sets each component of the Struct at the specified position to that of the src Struct.
-     * @param position the offset into this buffer where the Struct should be copied.
-     * @param src buffer pointing to the other Struct.
+     * Copies data from the source buffer into this buffer at its current position, increasing the position of both buffers.
+     * @param src buffer pointing to the first struct that should be copied.
+     * @param length the number of Structs to copy from the src buffer.
      */
-    setFromStruct(position: number, src: Struct<T>) {
-        let len = this.structLength();
-        let srcPos = 0;
-        let dstPos = position * len;
-        while (len--) {
-            this.data[dstPos++] = src.data[srcPos++];
+    rsetFromBuffer(src: this, length = src.capacity() - src.position()) {
+        while (length--) {
+            let structLength = this.structLength();
+            while (structLength--) {
+                this.data[this.dataPosition++] = src.data[src.dataPosition++];
+            }
         }
     }
 
@@ -139,7 +144,7 @@ export abstract class StructBuffer<T extends TypedArray> {
      * Sets each Struct in this buffer to the specified struct.
      * @param src the struct or the buffer pointing to the struct.
      */
-    setEachStruct(src: Struct<T> | this) {
+    setEach(src: Struct<T> | this) {
         let dstPos = 0;
         let dstLen = this.data.length;
         while (dstLen--) {
@@ -147,32 +152,6 @@ export abstract class StructBuffer<T extends TypedArray> {
             let srcLen = this.structLength();
             while(srcLen--) {
                 this.data[dstPos++] = src.data[srcPos++];
-            }
-        }
-    }
-
-    /**
-     * Sets the current struct to the src struct, then moves to the next position of this buffer.
-     * @param src the struct or the buffer pointing to the struct.
-     */
-    putStruct(src: Struct<T> | this) {
-        let len = this.structLength();
-        let srcPos = (<this>src).dataPosition || 0;
-        while (len--) {
-            this.data[this.dataPosition++] = src.data[srcPos++];
-        }
-    }
-
-    /**
-     * Copies data from the source buffer into this buffer at its current position, increasing the position of both buffers.
-     * @param src the buffer to copy into this buffer.
-     * @param length the number of Structs to copy from the src buffer.
-     */
-    putBuffer(src: this, length = src.capacity() - src.position()) {
-        while (length--) {
-            let structLength = this.structLength();
-            while (structLength--) {
-                this.data[this.dataPosition++] = src.data[src.dataPosition++];
             }
         }
     }
