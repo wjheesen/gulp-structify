@@ -14,7 +14,7 @@ export abstract class StructBuffer<T extends TypedArray> {
     /**
      * The position of the current Struct in the backing array.
      */
-    protected dataPosition: number;
+    public dataPosition: number;
 
     /**
      * Gets the number of components contained in each Struct of this buffer.
